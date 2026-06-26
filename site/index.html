@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDFFleet — the HTML-to-PDF API that costs half. APITemplate/PDFMonkey alternative.</title>
+  <meta name="description" content="PDFFleet is a fast HTML-to-PDF REST API via headless Chromium. Render HTML, URLs, or templates to PDF. 50 free/mo, paid from $9/mo — 50–70% cheaper than APITemplate, PDFMonkey, and Paperplane.">
+  <meta name="keywords" content="pdf api, html to pdf api, pdf generation api, apitemplate alternative, pdfmonkey alternative, paperplane alternative, cheap pdf api, headless chromium pdf">
+  <meta property="og:title" content="PDFFleet — HTML to PDF API, 50–70% cheaper">
+  <meta property="og:description" content="Fast HTML-to-PDF REST API. Free tier + paid from $9/mo. Same Chromium engine, a fraction of the price.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pdffleet.com/">
+  <link rel="canonical" href="https://pdffleet.com/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PDFFleet — HTML to PDF API, 50–70% cheaper">
+  <meta name="twitter:description" content="Fast HTML-to-PDF REST API via headless Chromium. Free tier + paid from $9/mo.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "PDFFleet",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any (REST API)",
+        "url": "https://pdffleet.com/",
+        "description": "Fast HTML-to-PDF REST API via headless Chromium. Render HTML, URLs, or templates to PDF — 50–70% cheaper than APITemplate, PDFMonkey, and Paperplane.",
+        "offers": [
+          { "@type": "Offer", "name": "Starter", "price": "0", "priceCurrency": "USD", "description": "50 PDFs/month free" },
+          { "@type": "Offer", "name": "Hobby", "price": "9", "priceCurrency": "USD", "description": "2,000 PDFs/month" },
+          { "@type": "Offer", "name": "Pro", "price": "29", "priceCurrency": "USD", "description": "50,000 PDFs/month" }
+        ]
+      },
+      {
+        "@type": "Organization",
+        "name": "PDFFleet",
+        "url": "https://pdffleet.com/",
+        "description": "Self-hosted HTML-to-PDF API."
+      },
+      {
+        "@type": "WebSite",
+        "name": "PDFFleet",
+        "url": "https://pdffleet.com/"
+      }
+    ]
+  }
+  </script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B1430'/%3E%3Cpath d='M8 11h11M8 16h8M8 21h5' stroke='%232D5BFF' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M21 19l4-3-4-3z' fill='%232D5BFF'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #F4F6FA; --surface: #FFFFFF; --surface-2: #F0F2F7;
+      --navy: #0B1430; --navy-2: #14203F;
+      --ink: #131A2B; --muted: #5A6478; --faint: #8C94A6;
+      --rule: #E3E7EF; --rule-2: #CFD5E0;
+      --blue: #2D5BFF; --blue-deep: #1B43E0; --blue-soft: rgba(45,91,255,0.08);
+      --save: #0E9F6E; --save-bg: rgba(14,159,110,0.10);
+      --display: 'Sora', system-ui, sans-serif;
+      --body: 'Inter', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--body); background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+    .eyebrow { font-family: var(--mono); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue); }
+    a { color: inherit; }
+
+    /* header */
+    .site-head { position: sticky; top: 0; z-index: 50; background: rgba(244,246,250,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule); }
+    .site-head .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-family: var(--display); font-weight: 700; font-size: 1.12rem; letter-spacing: -0.02em; text-decoration: none; color: var(--navy); }
+    .brand .mark { width: 30px; height: 30px; border-radius: 8px; background: var(--navy); display: grid; place-items: center; }
+    .brand .mark svg { display: block; }
+    .brand b { font-weight: 800; } .brand .lt { color: var(--blue); }
+    .nav { display: flex; align-items: center; gap: 26px; }
+    .nav a { font-family: var(--body); font-size: 0.9rem; font-weight: 500; text-decoration: none; color: var(--muted); transition: color .15s; }
+    .nav a:hover { color: var(--ink); }
+    .nav .nav-cta { font-family: var(--body); font-weight: 600; font-size: 0.88rem; color: #fff; background: var(--blue); padding: 9px 17px; border-radius: 9px; box-shadow: 0 6px 16px -8px var(--blue); transition: background .15s, transform .15s; }
+    .nav .nav-cta:hover { background: var(--blue-deep); transform: translateY(-1px); }
+    @media (max-width: 720px) { .nav .nav-link { display: none; } }
+
+    /* buttons */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--body); font-size: 0.95rem; font-weight: 600; padding: 13px 24px; border-radius: 10px; text-decoration: none; border: 1.5px solid transparent; cursor: pointer; transition: all .16s ease; }
+    .btn-solid { background: var(--blue); color: #fff; box-shadow: 0 10px 24px -12px var(--blue); }
+    .btn-solid:hover { background: var(--blue-deep); transform: translateY(-2px); }
+    .btn-ghost { border-color: var(--rule-2); color: var(--ink); background: var(--surface); }
+    .btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* hero */
+    .hero { padding: 80px 0 60px; }
+    .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 9px; margin-bottom: 22px; padding: 5px 12px 5px 9px; background: var(--blue-soft); border: 1px solid rgba(45,91,255,0.18); border-radius: 30px; }
+    .hero-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 4px rgba(45,91,255,0.18); }
+    .hero h1 { font-family: var(--display); font-weight: 800; font-size: clamp(2.5rem, 5.2vw, 3.9rem); line-height: 1.02; letter-spacing: -0.035em; margin-bottom: 22px; color: var(--navy); }
+    .hero h1 .half { position: relative; color: var(--blue); }
+    .hero h1 .half::after { content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 8px; background: rgba(45,91,255,0.18); z-index: -1; border-radius: 2px; }
+    .hero .lede { font-size: 1.12rem; color: var(--muted); max-width: 33em; margin-bottom: 30px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; }
+    .specs { display: flex; flex-wrap: wrap; gap: 9px 12px; }
+    .specs span { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); background: var(--surface); border: 1px solid var(--rule); padding: 6px 11px; border-radius: 7px; }
+    @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; gap: 36px; } .hero { padding: 56px 0 44px; } }
+
+    /* terminal */
+    .terminal { background: var(--navy); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 60px -28px rgba(11,20,48,0.55); font-family: var(--mono); font-size: 0.82rem; border: 1px solid rgba(255,255,255,0.06); }
+    .terminal .tbar { display: flex; align-items: center; gap: 7px; padding: 13px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .terminal .tbar i { width: 11px; height: 11px; border-radius: 50%; background: rgba(255,255,255,0.18); }
+    .terminal .tbar .fname { margin-left: 10px; font-size: 0.74rem; color: rgba(255,255,255,0.4); }
+    .terminal pre { padding: 18px; color: #C9D2E6; overflow-x: auto; line-height: 1.75; }
+    .terminal .c-prompt { color: #5B82FF; } .terminal .c-comment { color: #6B7493; }
+    .terminal .c-key { color: #4FD89B; } .terminal .c-str { color: #A9C4FF; }
+
+    /* section */
+    .section { padding: 30px 0 60px; }
+    .sec-head { text-align: center; margin-bottom: 40px; }
+    .sec-head .eyebrow { display: block; margin-bottom: 12px; }
+    .sec-head h2 { font-family: var(--display); font-weight: 700; font-size: clamp(1.7rem, 3.4vw, 2.4rem); letter-spacing: -0.03em; color: var(--navy); }
+    .sec-head p { color: var(--muted); margin-top: 10px; font-size: 1rem; }
+
+    /* comparison table */
+    .compare-card { background: var(--surface); border: 1px solid var(--rule); border-radius: 16px; padding: 8px; box-shadow: 0 20px 50px -36px rgba(11,20,48,0.4); overflow: hidden; }
+    .compare-wrap { overflow-x: auto; }
+    table.compare { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    table.compare th, table.compare td { padding: 16px 18px; text-align: left; border-bottom: 1px solid var(--rule); }
+    table.compare thead th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--faint); }
+    table.compare thead th.us { color: var(--blue); }
+    table.compare tbody tr:last-child td { border-bottom: none; }
+    table.compare td.us { background: var(--blue-soft); }
+    table.compare td.us:last-child { border-radius: 0; }
+    table.compare .price { font-family: var(--mono); font-weight: 600; font-size: 1rem; color: var(--ink); }
+    table.compare td.us .price { color: var(--blue); }
+    table.compare .saving { font-family: var(--mono); font-size: 0.73rem; color: var(--save); display: block; margin-top: 3px; font-weight: 500; }
+    table.compare tbody td:first-child { font-family: var(--display); font-weight: 600; color: var(--navy); }
+    .compare-note { margin-top: 18px; font-family: var(--mono); font-size: 0.78rem; color: var(--faint); text-align: center; }
+
+    /* features */
+    .feat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    @media (max-width: 720px) { .feat-grid { grid-template-columns: 1fr; } }
+    .feat { background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 26px; transition: border-color .16s, transform .16s, box-shadow .16s; }
+    .feat:hover { border-color: var(--blue); transform: translateY(-3px); box-shadow: 0 20px 40px -30px rgba(45,91,255,0.5); }
+    .feat .fnum { font-family: var(--mono); font-size: 0.78rem; font-weight: 600; color: var(--blue); margin-bottom: 12px; }
+    .feat h3 { font-family: var(--display); font-weight: 600; font-size: 1.18rem; margin-bottom: 8px; letter-spacing: -0.01em; color: var(--navy); }
+    .feat p { font-size: 0.94rem; color: var(--muted); }
+    .feat .fart { font-family: var(--mono); font-size: 0.78rem; background: var(--navy); color: #A9C4FF; border-radius: 8px; padding: 10px 12px; margin-top: 14px; overflow-x: auto; }
+
+    /* pricing */
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
+    @media (max-width: 760px) { .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; } }
+    .price-card { background: var(--surface); border: 1px solid var(--rule); border-radius: 16px; padding: 30px 28px; display: flex; flex-direction: column; transition: transform .16s, box-shadow .16s; }
+    .price-card:hover { transform: translateY(-3px); box-shadow: 0 24px 50px -34px rgba(11,20,48,0.4); }
+    .price-card.feature { background: var(--navy); border-color: var(--navy); position: relative; box-shadow: 0 30px 60px -30px rgba(11,20,48,0.6); }
+    .price-card.feature .pc-tier { color: #5B82FF; }
+    .price-card.feature .pc-name, .price-card.feature .pc-price { color: #fff; }
+    .price-card.feature .pc-price span, .price-card.feature .pc-desc { color: rgba(255,255,255,0.6); }
+    .price-card.feature .pc-feat li { color: rgba(255,255,255,0.85); }
+    .price-card.feature .pc-feat li::before { color: #4FD89B; }
+    .price-card.feature .flag { position: absolute; top: 20px; right: 22px; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: #0B1430; background: #4FD89B; padding: 3px 9px; border-radius: 20px; font-weight: 600; }
+    .pc-tier { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); margin-bottom: 10px; }
+    .pc-name { font-family: var(--display); font-weight: 600; font-size: 1.3rem; margin-bottom: 12px; color: var(--navy); }
+    .pc-price { font-family: var(--display); font-weight: 800; font-size: 2.5rem; letter-spacing: -0.03em; margin-bottom: 6px; color: var(--navy); }
+    .pc-price span { font-family: var(--mono); font-size: 0.82rem; font-weight: 400; color: var(--faint); letter-spacing: 0; }
+    .pc-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 22px; min-height: 40px; }
+    .pc-feat { list-style: none; margin-bottom: 26px; flex-grow: 1; }
+    .pc-feat li { font-size: 0.88rem; color: var(--ink); padding: 6px 0 6px 20px; position: relative; }
+    .pc-feat li::before { content: "✓"; position: absolute; left: 0; color: var(--save); font-weight: 700; }
+    .pc-cta { display: flex; width: 100%; }
+    .pricing-note { margin-top: 18px; font-family: var(--mono); font-size: 0.78rem; color: var(--faint); text-align: center; }
+
+    /* docs */
+    .code-block { background: var(--navy); border-radius: 14px; overflow: hidden; font-family: var(--mono); font-size: 0.82rem; box-shadow: 0 24px 50px -34px rgba(11,20,48,0.5); }
+    .code-block pre { padding: 22px; color: #C9D2E6; overflow-x: auto; line-height: 1.8; }
+    .code-block .c-comment { color: #6B7493; } .code-block .c-prompt { color: #5B82FF; } .code-block .c-key { color: #4FD89B; }
+
+    /* cta */
+    .cta-strip { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: #fff; border-radius: 20px; padding: 52px 40px; text-align: center; position: relative; overflow: hidden; }
+    .cta-strip::before { content: ""; position: absolute; top: -40%; right: -10%; width: 380px; height: 380px; background: radial-gradient(circle, rgba(45,91,255,0.35), transparent 70%); }
+    .cta-strip h2 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-spacing: -0.03em; margin-bottom: 12px; position: relative; }
+    .cta-strip p { font-family: var(--mono); font-size: 0.86rem; color: rgba(255,255,255,0.62); margin-bottom: 26px; position: relative; }
+    .cta-strip .btn-solid { background: #fff; color: var(--navy); position: relative; }
+    .cta-strip .btn-solid:hover { background: #fff; box-shadow: 0 14px 30px -10px rgba(255,255,255,0.4); }
+
+    /* footer */
+    .site-foot { border-top: 1px solid var(--rule); padding: 38px 0 56px; margin-top: 44px; }
+    .site-foot .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .site-foot .meta { font-family: var(--mono); font-size: 0.76rem; color: var(--faint); }
+    .site-foot .links { display: flex; gap: 22px; flex-wrap: wrap; }
+    .site-foot .links a { font-family: var(--mono); font-size: 0.78rem; text-decoration: none; color: var(--muted); }
+    .site-foot .links a:hover { color: var(--blue); }
+
+    :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a href="/" class="brand">
+      <span class="mark"><svg width="20" height="20" viewBox="0 0 32 32"><path d="M8 11h11M8 16h8M8 21h5" stroke="#2D5BFF" stroke-width="2.4" stroke-linecap="round"/><path d="M21 19l4-3-4-3z" fill="#2D5BFF"/></svg></span>
+      PDF<b>Fleet</b>
+    </a>
+    <nav class="nav">
+      <a href="#compare" class="nav-link">vs incumbents</a>
+      <a href="#pricing" class="nav-link">pricing</a>
+      <a href="#docs" class="nav-link">docs</a>
+      <a href="#pricing" class="nav-cta">Get a key →</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="hero-eyebrow"><span class="dot"></span><span class="eyebrow">HTML → PDF API · self-hosted</span></span>
+        <h1>The PDF API that costs <span class="half">half</span>.</h1>
+        <p class="lede">PDFFleet turns HTML, a URL, or a template into a pixel-perfect PDF via headless Chromium — one fast REST call. We run it on our own metal instead of VC-funded cloud, so every tier is <b>50–70% cheaper</b> than APITemplate, PDFMonkey, and Paperplane. No per-render markup, no surprise overages.</p>
+        <div class="hero-actions">
+          <a href="#pricing" class="btn btn-solid">Start free — 50 PDFs/mo →</a>
+          <a href="#docs" class="btn btn-ghost">Read the docs</a>
+        </div>
+        <div class="specs">
+          <span>headless chromium</span>
+          <span>A0–A6 · Letter · Legal</span>
+          <span>template + JSON merge</span>
+          <span>API-key auth</span>
+        </div>
+      </div>
+      <div>
+        <div class="terminal">
+          <div class="tbar"><i></i><i></i><i></i><span class="fname">curl → pdffleet.com</span></div>
+<pre><span class="c-comment"># render inline HTML to a PDF</span>
+<span class="c-prompt">$</span> curl -X POST <span class="c-str">https://pdffleet.com/v1/pdf</span> \
+    -H <span class="c-str">"Authorization: Bearer YOUR_KEY"</span> \
+    -H <span class="c-str">"Content-Type: application/json"</span> \
+    -d <span class="c-str">'{"html":"&lt;h1&gt;Invoice #1234&lt;/h1&gt;"}'</span> \
+    -o invoice.pdf
+
+<span class="c-comment"># 200 OK · application/pdf · 18,420 bytes</span>
+<span class="c-prompt">$</span> file invoice.pdf
+<span class="c-key">→</span> invoice.pdf: PDF document, version 1.4</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="section" id="compare">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">price comparison · verified 2026-06</span>
+      <h2>Same engine. Half the price.</h2>
+      <p>Everyone here renders with headless Chromium. We just don't mark it up 5×.</p>
+    </div>
+    <div class="compare-card">
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead>
+            <tr>
+              <th>Provider</th>
+              <th>Entry plan</th>
+              <th>PDFs/mo</th>
+              <th class="us">PDFFleet Hobby</th>
+              <th class="us">PDFFleet Pro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>APITemplate.io</td>
+              <td><span class="price">$19/mo</span></td>
+              <td>800</td>
+              <td class="us"><span class="price">$9/mo</span><span class="saving">−53% · 2,000 PDFs</span></td>
+              <td class="us"><span class="price">$29/mo</span><span class="saving">−53% · 50,000 PDFs</span></td>
+            </tr>
+            <tr>
+              <td>PDFMonkey</td>
+              <td><span class="price">$15/mo</span></td>
+              <td>500</td>
+              <td class="us"><span class="price">$9/mo</span><span class="saving">−40% · 4× more PDFs</span></td>
+              <td class="us"><span class="price">$29/mo</span><span class="saving">−48% · 100× more PDFs</span></td>
+            </tr>
+            <tr>
+              <td>Paperplane</td>
+              <td><span class="price">$19/mo</span></td>
+              <td>1,000</td>
+              <td class="us"><span class="price">$9/mo</span><span class="saving">−53% · 2× more PDFs</span></td>
+              <td class="us"><span class="price">$29/mo</span><span class="saving">−53% · 50× more PDFs</span></td>
+            </tr>
+            <tr>
+              <td>Nutrient</td>
+              <td><span class="price">$99/mo</span></td>
+              <td>5,000</td>
+              <td class="us"><span class="price">$9/mo</span><span class="saving">−91% · free tier covers 50</span></td>
+              <td class="us"><span class="price">$29/mo</span><span class="saving">−71% · 10× more PDFs</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="compare-note">Why cheaper? Same tech (headless Chromium → PDF), run on self-owned hardware instead of AWS egress. No per-render markup. No VC valuation to feed.</p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">what you get</span>
+      <h2>Built for developers</h2>
+    </div>
+    <div class="feat-grid">
+      <div class="feat">
+        <div class="fnum">01 · render</div>
+        <h3>HTML or URL in, PDF out</h3>
+        <p>POST HTML inline, or pass a URL and we render the live page. Full CSS, web fonts, backgrounds, images — Chromium-grade fidelity.</p>
+        <div class="fart">POST /v1/pdf {"url":"https://yours.com/doc"}</div>
+      </div>
+      <div class="feat">
+        <div class="fnum">02 · templates</div>
+        <h3>Template + JSON merge</h3>
+        <p>Store a template once, render it with different data. Mustache-style <code>{{field}}</code> substitution — ideal for invoices, reports, certificates.</p>
+        <div class="fart">{"template":"invoice","data":{"total":42.50}}</div>
+      </div>
+      <div class="feat">
+        <div class="fnum">03 · control</div>
+        <h3>Page size, margins, backgrounds</h3>
+        <p>A0 through A6, Letter, Legal, Tabloid. Control margins, background rendering, and wait-for-selector timing — all via the options object.</p>
+        <div class="fart">{"format":"A4","printBackground":true}</div>
+      </div>
+      <div class="feat">
+        <div class="fnum">04 · auth</div>
+        <h3>API-key auth + usage metering</h3>
+        <p>Bearer-token auth with per-key rate limiting and a monthly quota. Check usage anytime via <code>GET /v1/usage</code>. No surprise bills.</p>
+        <div class="fart">Authorization: Bearer YOUR_KEY</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">pricing · cancel anytime</span>
+      <h2>Simple, honest tiers</h2>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="pc-tier">free</div>
+        <div class="pc-name">Starter</div>
+        <div class="pc-price">$0<span>/forever</span></div>
+        <div class="pc-desc">Test it, build with it, ship small projects.</div>
+        <ul class="pc-feat">
+          <li>50 PDFs / month</li>
+          <li>20 requests / minute</li>
+          <li>HTML + URL + template render</li>
+          <li>All page sizes + options</li>
+          <li>Community support</li>
+        </ul>
+        <a href="#docs" class="btn btn-ghost pc-cta">Get free key →</a>
+      </div>
+      <div class="price-card feature">
+        <span class="flag">Best value</span>
+        <div class="pc-tier">recommended</div>
+        <div class="pc-name">Hobby</div>
+        <div class="pc-price">$9<span>/month</span></div>
+        <div class="pc-desc">For side projects and small businesses.</div>
+        <ul class="pc-feat">
+          <li>2,000 PDFs / month</li>
+          <li>60 requests / minute</li>
+          <li>Everything in Starter</li>
+          <li>Priority email support</li>
+          <li>Custom templates</li>
+        </ul>
+        <a href="https://buy.stripe.com/14AfZg79kepZ3b9cMr9Zm07" class="btn btn-solid pc-cta">Subscribe $9/mo →</a>
+      </div>
+      <div class="price-card">
+        <div class="pc-tier">pro</div>
+        <div class="pc-name">Pro</div>
+        <div class="pc-price">$29<span>/month</span></div>
+        <div class="pc-desc">High-volume production — the cheapest serious tier anywhere.</div>
+        <ul class="pc-feat">
+          <li>50,000 PDFs / month</li>
+          <li>300 requests / minute</li>
+          <li>Everything in Hobby</li>
+          <li>Priority rendering queue</li>
+          <li>Dedicated support channel</li>
+        </ul>
+        <a href="https://buy.stripe.com/28EbJ0alw3LlaDBeUz9Zm08" class="btn btn-ghost pc-cta">Subscribe $29/mo →</a>
+      </div>
+    </div>
+    <p class="pricing-note">Need more than 50,000/mo? Contact us for a custom volume tier. No per-document overage fees — ever.</p>
+  </div>
+</section>
+
+<!-- DOCS -->
+<section class="section" id="docs">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">quickstart</span>
+      <h2>Three lines to your first PDF</h2>
+    </div>
+    <div class="code-block">
+<pre><span class="c-comment"># 1. Render HTML to PDF</span>
+curl -X POST https://pdffleet.com/v1/pdf \
+  -H "Authorization: Bearer YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"html":"&lt;h1&gt;Hello&lt;/h1&gt;","options":{"format":"A4"}}' \
+  -o output.pdf
+
+<span class="c-comment"># 2. Render a URL</span>
+curl -X POST https://pdffleet.com/v1/pdf \
+  -H "Authorization: Bearer YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com","options":{"format":"Letter"}}' \
+  -o page.pdf
+
+<span class="c-comment"># 3. Render a template with data</span>
+curl -X POST https://pdffleet.com/v1/pdf \
+  -H "Authorization: Bearer YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"template":"invoice","data":{"title":"Invoice #999","total":"1500.00"}}' \
+  -o invoice.pdf
+
+<span class="c-comment"># Check your usage</span>
+curl https://pdffleet.com/v1/usage \
+  -H "Authorization: Bearer YOUR_KEY"</pre>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="wrap">
+    <div class="cta-strip">
+      <h2>Start rendering in 60 seconds</h2>
+      <p>50 free PDFs/mo · no credit card · swap your endpoint and save 50–70%</p>
+      <a href="#pricing" class="btn btn-solid">Get your API key →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span class="meta">© 2026 PDFFleet · self-hosted HTML-to-PDF API</span>
+    <div class="links">
+      <a href="/docs">API docs</a>
+      <a href="#pricing">pricing</a>
+      <a href="/alternatives/apitemplate">APITemplate alternative</a>
+      <a href="/alternatives/pdfmonkey">PDFMonkey alternative</a>
+      <a href="/alternatives/paperplane">Paperplane alternative</a>
+      <a href="/alternatives/docraptor">DocRaptor alternative</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

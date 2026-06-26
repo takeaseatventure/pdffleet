@@ -1,0 +1,26 @@
+<html>
+<head>
+<style>
+  body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; color: #18211D; margin: 48px; }
+  h1 { font-size: 28px; margin-bottom: 4px; }
+  .muted { color: #6C726A; font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+  th { text-align: left; border-bottom: 1px solid #CDCCC1; padding: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #6C726A; }
+  td { padding: 8px; border-bottom: 1px solid #EBEAE3; }
+  .total { font-weight: bold; font-size: 18px; }
+</style>
+</head>
+<body>
+  <h1>{{title}}</h1>
+  <p class="muted">{{subtitle}}</p>
+  <table>
+    <thead>
+      <tr><th>Description</th><th>Qty</th><th>Amount</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>{{line1_desc}}</td><td>{{line1_qty}}</td><td>${{line1_amt}}</td></tr>
+    </tbody>
+  </table>
+  <p class="total">Total: ${{total}}</p>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Reference — PDFFleet HTML-to-PDF API Documentation</title>
+<meta name="description" content="Complete PDFFleet API reference: render HTML, URLs, or templates to PDF. Authentication, request/response formats, options, rate limits, code examples in curl, Node.js, Python, PHP, and Ruby.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:title" content="PDFFleet API Reference — HTML-to-PDF Docs">
+<meta property="og:description" content="Complete API reference for the PDFFleet HTML-to-PDF API. Auth, render endpoints, options, code examples.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pdffleet.com/docs">
+<link rel="canonical" href="https://pdffleet.com/docs">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B1430'/%3E%3Cpath d='M8 11h11M8 16h8M8 21h5' stroke='%232D5BFF' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M21 19l4-3-4-3z' fill='%232D5BFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#F4F6FA;--surface:#FFF;--navy:#0B1430;--navy-2:#14203F;--ink:#131A2B;--muted:#5A6478;--faint:#8C94A6;--rule:#E3E7EF;--rule-2:#CFD5E0;--blue:#2D5BFF;--blue-deep:#1B43E0;--blue-soft:rgba(45,91,255,0.08);--save:#0E9F6E;--del:#D8453A;--display:'Sora',system-ui,sans-serif;--body:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+html{scroll-behavior:smooth}body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding:0 28px}a{color:inherit}
+.site-head{position:sticky;top:0;z-index:50;background:rgba(244,246,250,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+.site-head .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:700;font-size:1.12rem;letter-spacing:-0.02em;text-decoration:none;color:var(--navy)}
+.brand .mark{width:30px;height:30px;border-radius:8px;background:var(--navy);display:grid;place-items:center}.brand b{font-weight:800}
+.nav{display:flex;align-items:center;gap:24px}.nav a{font-size:0.9rem;font-weight:500;text-decoration:none;color:var(--muted)}.nav a:hover{color:var(--ink)}
+.nav .nav-cta{color:#fff;background:var(--blue);padding:9px 17px;border-radius:9px;font-weight:600;font-size:0.88rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:0.95rem;padding:13px 24px;border-radius:10px;text-decoration:none;border:1.5px solid transparent;cursor:pointer;transition:all .16s}
+.btn-solid{background:var(--blue);color:#fff;box-shadow:0 10px 24px -12px var(--blue)}.btn-solid:hover{background:var(--blue-deep);transform:translateY(-2px)}
+.docs-hero{padding:36px 0 20px}
+.docs-hero h1{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,3.5vw,2.6rem);letter-spacing:-0.03em;margin-bottom:10px;color:var(--navy)}
+.docs-hero p{font-size:1.05rem;color:var(--muted);max-width:42em}
+.docs-body{display:grid;grid-template-columns:220px 1fr;gap:36px;padding-bottom:60px}
+@media(max-width:840px){.docs-body{grid-template-columns:1fr}}
+.toc{position:sticky;top:88px;align-self:start;font-size:0.85rem}
+.toc h4{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+.toc ul{list-style:none}.toc li{margin-bottom:7px}
+.toc a{text-decoration:none;color:var(--muted)}.toc a:hover{color:var(--blue)}
+.doc-section{margin-bottom:44px;scroll-margin-top:80px}
+.doc-section h2{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-0.02em;color:var(--navy);margin-bottom:8px;border-bottom:2px solid var(--rule);padding-bottom:8px}
+.doc-section h3{font-family:var(--display);font-weight:600;font-size:1.05rem;color:var(--navy);margin:20px 0 8px}
+.doc-section p{color:var(--muted);margin-bottom:12px;font-size:0.94rem}
+.doc-section ul,.doc-section ol{margin:0 0 12px 20px;color:var(--muted);font-size:0.94rem}
+.doc-section li{margin-bottom:5px}
+.doc-section code,.param-table code{font-family:var(--mono);font-size:0.82rem;background:var(--blue-soft);color:var(--blue);padding:2px 6px;border-radius:4px}
+.code-block{background:var(--navy);border-radius:12px;overflow:hidden;font-family:var(--mono);font-size:0.8rem;box-shadow:0 20px 44px -30px rgba(11,20,48,0.5);margin:14px 0}
+.code-block .tbar{display:flex;align-items:center;gap:7px;padding:11px 16px;background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06)}
+.code-block .tbar i{width:11px;height:11px;border-radius:50%;display:inline-block}.code-block .tbar i:nth-child(1){background:#FF5F57}.code-block .tbar i:nth-child(2){background:#FEBC2E}.code-block .tbar i:nth-child(3){background:#28C840}
+.code-block .tbar .fname{color:var(--faint);font-size:0.72rem;margin-left:6px}
+.code-block pre{padding:18px;color:#C9D2E6;overflow-x:auto;line-height:1.75}
+.code-block .c-comment{color:#6B7493}.code-block .c-prompt{color:#5B82FF}.code-block .c-key{color:#4FD89B}.code-block .c-str{color:#FFC580}
+.param-table{width:100%;border-collapse:collapse;font-size:0.88rem;margin:14px 0}
+.param-table th,.param-table td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
+.param-table th{font-family:var(--mono);font-size:0.72rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--faint);background:var(--surface)}
+.param-table td:first-child{font-family:var(--mono);font-weight:600;color:var(--navy)}
+.method-badge{display:inline-block;font-family:var(--mono);font-size:0.68rem;font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:0.04em;text-transform:uppercase}
+.method-POST{background:rgba(14,159,110,0.12);color:var(--save)}.method-GET{background:var(--blue-soft);color:var(--blue)}
+.endpoint-bar{display:flex;align-items:center;gap:12px;margin:6px 0 4px}
+.endpoint-bar .ep{font-family:var(--mono);font-size:0.88rem;font-weight:600;color:var(--navy)}
+.tip{background:var(--blue-soft);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:14px 18px;margin:14px 0;font-size:0.88rem;color:var(--ink)}
+.tip strong{color:var(--blue)}
+.site-foot{border-top:1px solid var(--rule);padding:36px 0 52px;margin-top:40px}
+.site-foot .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.site-foot .meta{font-family:var(--mono);font-size:0.76rem;color:var(--faint)}
+.site-foot .links{display:flex;gap:20px;flex-wrap:wrap}
+.site-foot .links a{font-family:var(--mono);font-size:0.78rem;text-decoration:none;color:var(--muted)}.site-foot .links a:hover{color:var(--blue)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+</style>
+</head>
+<body>
+<header class="site-head"><div class="wrap"><a href="/" class="brand"><span class="mark"><svg width="20" height="20" viewBox="0 0 32 32"><path d="M8 11h11M8 16h8M8 21h5" stroke="#2D5BFF" stroke-width="2.4" stroke-linecap="round"/><path d="M21 19l4-3-4-3z" fill="#2D5BFF"/></svg></span>PDF<b>Fleet</b></a><nav class="nav"><a href="/#pricing" class="nav-link">pricing</a><a href="/docs" class="nav-link">docs</a><a href="/#pricing" class="nav-cta">Get a key &rarr;</a></nav></div></header>
+
+<div class="wrap">
+<section class="docs-hero">
+  <h1>API Reference</h1>
+  <p>Everything you need to render HTML, URLs, and templates to PDF. All requests are authenticated with an API key in the <code>Authorization</code> header. Base URL: <code>https://pdffleet.com</code></p>
+</section>
+
+<div class="docs-body">
+<aside class="toc">
+  <h4>Reference</h4>
+  <ul>
+    <li><a href="#auth">Authentication</a></li>
+    <li><a href="#render-html">POST /v1/pdf (HTML)</a></li>
+    <li><a href="#render-url">POST /v1/pdf (URL)</a></li>
+    <li><a href="#render-template">POST /v1/pdf (template)</a></li>
+    <li><a href="#options">PDF options</a></li>
+    <li><a href="#health">GET /v1/health</a></li>
+    <li><a href="#usage">GET /v1/usage</a></li>
+    <li><a href="#rate-limits">Rate limits</a></li>
+    <li><a href="#errors">Errors</a></li>
+    <li><a href="#sdks">SDK examples</a></li>
+  </ul>
+</aside>
+
+<div>
+
+<div class="doc-section" id="auth">
+  <h2>Authentication</h2>
+  <p>Every request must include your API key as a Bearer token:</p>
+  <div class="code-block"><div class="tbar"><i></i><i></i><i></i><span class="fname">Authorization header</span></div>
+<pre>Authorization: Bearer tsa_pdf_your_key_here</pre></div>
+  <p>Get a free key (50 PDFs/mo) or a paid key on the <a href="/#pricing" style="color:var(--blue)">pricing page</a>. Keys are tier-scoped: the tier determines your monthly PDF quota and requests-per-minute limit.</p>
+</div>
+
+<div class="doc-section" id="render-html">
+  <h2>Render HTML to PDF</h2>
+  <div class="endpoint-bar"><span class="method-badge method-POST">POST</span><span class="ep">/v1/pdf</span></div>
+  <p>Send inline HTML and receive a rendered PDF as the response body (<code>application/pdf</code>).</p>
+  <h3>Request body</h3>
+  <table class="param-table">
+    <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>html</td><td>string</td><td>one of html/url/template</td><td>Inline HTML document to render.</td></tr>
+      <tr><td>options</td><td>object</td><td>no</td><td>PDF rendering options (see <a href="#options">options</a>).</td></tr>
+    </tbody>
+  </table>
+  <h3>Example</h3>
+  <div class="code-block"><div class="tbar"><i></i><i></i><i></i><span class="fname">curl</span></div>
+<pre><span class="c-prompt">$</span> curl -X POST https://pdffleet.com/v1/pdf \
+  -H <span class="c-str">"Authorization: Bearer tsa_pdf_your_key"</span> \
+  -H <span class="c-str">"Content-Type: application/json"</span> \
+  -d <span class="c-str">'{"html":"&lt;h1&gt;Invoice&lt;/h1&gt;&lt;p&gt;Total: $1,500&lt;/p&gt;","options":{"format":"A4","printBackground":true}}'</span> \
+  -o invoice.pdf</pre></div>
+  <p>Returns: binary PDF file (<code>Content-Type: application/pdf</code>), HTTP 200.</p>
+</div>
+
+<div class="doc-section" id="render-url">
+  <h2>Render a URL to PDF</h2>
+  <div class="endpoint-bar"><span class="method-badge method-POST">POST</span><span class="ep">/v1/pdf</span></div>
+  <p>Pass a URL and PDFFleet will load the page in headless Chromium, wait for it to render, then produce a PDF — useful for capturing live pages or your own internal app URLs.</p>
+  <table class="param-table">
+    <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>url</td><td>string</td><td>one of html/url/template</td><td>Public URL to render to PDF.</td></tr>
+      <tr><td>options</td><td>object</td><td>no</td><td>PDF rendering options.</td></tr>
+    </tbody>
+  </table>
+  <div class="code-block"><div class="tbar"><i></i><i></i><i></i><span class="fname">curl</span></div>
+<pre><span class="c-prompt">$</span> curl -X POST https://pdffleet.com/v1/pdf \
+  -H <span class="c-str">"Authorization: Bearer tsa_pdf_your_key"</span> \
+  -H <span class="c-str">"Content-Type: application/json"</span> \
+  -d <span class="c-str">'{"url":"https://example.com","options":{"format":"Letter"}}'</span> \
+  -o page.pdf</pre></div>
+</div>
+
+<div class="doc-section" id="render-template">
+  <h2>Render a template with data</h2>
+  <div class="endpoint-bar"><span class="method-badge method-POST">POST</span><span class="ep">/v1/pdf</span></div>
+  <p>Store a named HTML template containing <code>{{field}}</code> tokens, then render it repeatedly with different JSON data — ideal for invoices, reports, certificates, and receipts.</p>
+  <table class="param-table">
+    <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>template</td><td>string</td><td>one of html/url/template</td><td>Name of a stored template to render.</td></tr>
+      <tr><td>data</td><td>object</td><td>yes (with template)</td><td>Key-value map merged into the template's <code>{{tokens}}</code>.</td></tr>
+      <tr><td>options</td><td>object</td><td>no</td><td>PDF rendering options.</td></tr>
+    </tbody>
+  </table>
+  <div class="code-block"><div class="tbar"><i></i><i></i><i></i><span class="fname">curl</span></div>
+<pre><span class="c-prompt">$</span> curl -X POST https://pdffleet.com/v1/pdf \
+  -H <span class="c-str">"Authorization: Bearer tsa_pdf_your_key"</span> \
+  -H <span class="c-str">"Content-Type: application/json"</span> \
+  -d <span class="c-str">'{"template":"invoice","data":{"invoice_no":"1024","total":"1500.00","customer":"Acme"}}'</span> \
+  -o invoice.pdf</pre></div>
+  <div class="tip"><strong>Template tokens:</strong> use <code>{{field_name}}</code> in your HTML. Nested keys like <code>{{customer.name}}</code> are supported. Missing fields render as empty strings.</div>
+</div>
+
+<div class="doc-section" id="options">
+  <h2>PDF options</h2>
+  <p>Pass an <code>options</code> object to control the PDF output. All fields are optional.</p>
+  <table class="param-table">
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>format</td><td>string</td><td><code>"A4"</code></td><td>Page size: <code>A4</code>, <code>Letter</code>, <code>Legal</code>, <code>A3</code>, <code>Tabloid</code>.</td></tr>
+      <tr><td>landscape</td><td>boolean</td><td><code>false</code></td><td>Render in landscape orientation.</td></tr>
+      <tr><td>printBackground</td><td>boolean</td><td><code>false</code></td><td>Include CSS background colors and images.</td></tr>
+      <tr><td>scale</td><td>number</td><td><code>1</code></td><td>Scale factor for content (0.1&ndash;2.0).</td></tr>
+      <tr><td>margin.top</td><td>string</td><td><code>"0.4in"</code></td><td>Top margin (e.g. <code>"0.5in"</code>, <code>"10mm"</code>).</td></tr>
+      <tr><td>margin.bottom</td><td>string</td><td><code>"0.4in"</code></td><td>Bottom margin.</td></tr>
+      <tr><td>margin.left</td><td>string</td><td><code>"0.4in"</code></td><td>Left margin.</td></tr>
+      <tr><td>margin.right</td><td>string</td><td><code>"0.4in"</code></td><td>Right margin.</td></tr>
+      <tr><td>displayHeaderFooter</td><td>boolean</td><td><code>false</code></td><td>Add a header/footer to each page.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="doc-section" id="health">
+  <h2>Health check</h2>
+  <div class="endpoint-bar"><span class="method-badge method-GET">GET</span><span class="ep">/v1/health</span></div>
+  <p>No authentication required. Returns service status and browser readiness.</p>
+  <div class="code-block"><div class="tbar"><i></i><i></i><i></i><span class="fname">response</span></div>
+<pre>{
+  <span class="c-key">"status"</span>: <span class="c-str">"ok"</span>,
+  <span class="c-key">"service"</span>: <span class="c-str">"pdffleet-api"</span>,
+  <span class="c-key">"version"</span>: <span class="c-str">"1.0.0"</span>,
+  <span class="c-key">"browser"</span>: <span class="c-str">"chromium-ready"</span>,
+  <span class="c-key">"timestamp"</span>: <span class="c-str">"2026-06-26T20:00:41.063Z"</span>
+}</pre></div>
+</div>
+
+<div class="doc-section" id="usage">
+  <h2>Check usage</h2>
+  <div class="endpoint-bar"><span class="method-badge method-GET">GET</span><span class="ep">/v1/usage</span></div>
+  <p>Returns your current tier, this month's PDF count, and your remaining quota. Requires authentication.</p>
+  <div class="code-block"><div class="tbar"><i></i><i></i><i></i><span class="fname">response</span></div>
+<pre>{
+  <span class="c-key">"tier"</span>: <span class="c-str">"hobby"</span>,
+  <span class="c-key">"monthly_limit"</span>: 2000,
+  <span class="c-key">"used"</span>: 142,
+  <span class="c-key">"remaining"</span>: 1858,
+  <span class="c-key">"period"</span>: <span class="c-str">"2026-06"</span>
+}</pre></div>
+</div>
+
+<div class="doc-section" id="rate-limits">
+  <h2>Rate limits &amp; quotas</h2>
+  <p>Requests are rate-limited per API key based on your tier:</p>
+  <table class="param-table">
+    <thead><tr><th>Tier</th><th>PDFs / month</th><th>Requests / minute</th><th>Price</th></tr></thead>
+    <tbody>
+      <tr><td>Free</td><td>50</td><td>20</td><td>$0</td></tr>
+      <tr><td>Hobby</td><td>2,000</td><td>60</td><td>$9/mo</td></tr>
+      <tr><td>Pro</td><td>50,000</td><td>300</td><td>$29/mo</td></tr>
+    </tbody>
+  </table>
+  <p>Exceeding the rate limit returns <code>429 Too Many Requests</code>. The monthly quota resets on the 1st of each calendar month.</p>
+</div>
+
+<div class="doc-section" id="errors">
+  <h2>Error responses</h2>
+  <table class="param-table">
+    <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td>400</td><td>Bad request &mdash; missing or invalid <code>html</code>/<code>url</code>/<code>template</code>.</td></tr>
+      <tr><td>401</td><td>Unauthorized &mdash; missing or invalid API key.</td></tr>
+      <tr><td>403</td><td>Forbidden &mdash; monthly quota exceeded.</td></tr>
+      <tr><td>422</td><td>Unprocessable &mdash; invalid format or options.</td></tr>
+      <tr><td>429</td><td>Rate limited &mdash; too many requests per minute.</td></tr>
+      <tr><td>504</td><td>Render timeout &mdash; the page or HTML took too long to load.</td></tr>
+    </tbody>
+  </table>
+  <p>Errors return JSON: <code>{"error":"message","code":422}</code></p>
+</div>
+
+<div class="doc-section" id="sdks">
+  <h2>SDK examples</h2>
+
+  <h3>Node.js</h3>
+  <div class="code-block"><div class="tbar"><i></i><i></i><i></i><span class="fname">node</span></div>
+<pre><span class="c-key">const</span> fs = <span class="c-key">require</span>(<span class="c-str">'fs'</span>);
+
+<span class="c-key">const</span> res = <span class="c-key">await</span> fetch(<span class="c-str">'https://pdffleet.com/v1/pdf'</span>, {
+  method: <span class="c-str">'POST'</span>,
+  headers: {
+    <span class="c-str">'Authorization'</span>: <span class="c-str">'Bearer tsa_pdf_your_key'</span>,
+    <span class="c-str">'Content-Type'</span>: <span class="c-str">'application/json'</span>,
+  },
+  body: JSON.stringify({
+    html: <span class="c-str">'&lt;h1&gt;Hello from PDFFleet&lt;/h1&gt;'</span>,
+    options: { format: <span class="c-str">'A4'</span> }
+  })
+});
+
+<span class="c-key">const</span> buf = Buffer.from(<span class="c-key">await</span> res.arrayBuffer());
+fs.writeFileSync(<span class="c-str">'output.pdf'</span>, buf);</pre></div>
+
+  <h3>Python</h3>
+  <div class="code-block"><div class="tbar"><i></i><i></i><i></i><span class="fname">python</span></div>
+<pre><span class="c-key">import</span> requests
+
+resp = requests.post(
+    <span class="c-str">'https://pdffleet.com/v1/pdf'</span>,
+    headers={<span class="c-str">'Authorization'</span>: <span class="c-str">'Bearer tsa_pdf_your_key'</span>},
+    json={<span class="c-str">'html'</span>: <span class="c-str">'&lt;h1&gt;Hello from PDFFleet&lt;/h1&gt;'</span>,
+          <span class="c-str">'options'</span>: {<span class="c-str">'format'</span>: <span class="c-str">'A4'</span>}}
+)
+
+<span class="c-key">with</span> open(<span class="c-str">'output.pdf'</span>, <span class="c-str">'wb'</span>) <span class="c-key">as</span> f:
+    f.write(resp.content)</pre></div>
+
+  <h3>PHP</h3>
+  <div class="code-block"><div class="tbar"><i></i><i></i><i></i><span class="fname">php</span></div>
+<pre><span class="c-key">$ch</span> = curl_init(<span class="c-str">'https://pdffleet.com/v1/pdf'</span>);
+curl_setopt(<span class="c-key">$ch</span>, CURLOPT_POST, <span class="c-key">true</span>);
+curl_setopt(<span class="c-key">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="c-key">true</span>);
+curl_setopt(<span class="c-key">$ch</span>, CURLOPT_HTTPHEADER, [
+    <span class="c-str">'Authorization: Bearer tsa_pdf_your_key'</span>,
+    <span class="c-str">'Content-Type: application/json'</span>,
+]);
+curl_setopt(<span class="c-key">$ch</span>, CURLOPT_POSTFIELDS, json_encode([
+    <span class="c-str">'html'</span> =&gt; <span class="c-str">'&lt;h1&gt;Hello from PDFFleet&lt;/h1&gt;'</span>,
+    <span class="c-str">'options'</span> =&gt; [<span class="c-str">'format'</span> =&gt; <span class="c-str">'A4'</span>]
+]));
+<span class="c-key">$pdf</span> = curl_exec(<span class="c-key">$ch</span>);
+file_put_contents(<span class="c-str">'output.pdf'</span>, <span class="c-key">$pdf</span>);</pre></div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+<footer class="site-foot"><div class="wrap">
+  <span class="meta">&copy; 2026 PDFFleet &middot; self-hosted HTML-to-PDF API</span>
+  <div class="links">
+    <a href="/">home</a>
+    <a href="/#pricing">pricing</a>
+    <a href="/#docs">quickstart</a>
+    <a href="/alternatives/apitemplate">APITemplate alternative</a>
+    <a href="/alternatives/docraptor">DocRaptor alternative</a>
+  </div>
+</div></footer>
+</body>
+</html>

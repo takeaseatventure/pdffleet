@@ -1,0 +1,21 @@
+# Secrets & runtime data
+/data/
+api_keys.json
+*.env
+.env
+.env.*
+
+# Stripe
+stripe_*.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Temp
+/tmp/
+*.tmp
