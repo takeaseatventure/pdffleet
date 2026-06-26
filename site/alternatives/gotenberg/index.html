@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gotenberg Alternative — Managed PDF API | PDFFleet</title>
+<meta name="description" content="Gotenberg is a free, open-source, self-hosted HTML-to-PDF API. PDFFleet runs the same Chromium engine, fully managed — no Docker, no DevOps, API keys and usage billing out of the box.">
+<meta name="keywords" content="gotenberg alternative, managed pdf api, hosted gotenberg, pdf generation api, html to pdf api, gotenberg vs pdffleet">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:title" content="Gotenberg Alternative — Managed PDF API | PDFFleet">
+<meta property="og:description" content="Gotenberg is free and self-hosted. PDFFleet runs the same Chromium engine, fully managed — no Docker, no DevOps, API keys included.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pdffleet.com/alternatives/gotenberg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Gotenberg Alternative — Managed PDF API | PDFFleet">
+<meta name="twitter:description" content="Gotenberg is free and self-hosted. PDFFleet runs the same Chromium engine, fully managed.">
+<link rel="canonical" href="https://pdffleet.com/alternatives/gotenberg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B1430'/%3E%3Cpath d='M8 11h11M8 16h8M8 21h5' stroke='%232D5BFF' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M21 19l4-3-4-3z' fill='%232D5BFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is PDFFleet the same as Gotenberg?","acceptedAnswer":{"@type":"Answer","text":"Both render HTML to PDF using headless Chromium — the same browser engine. The difference is deployment: Gotenberg is free, open-source software you run yourself inside a Docker container. PDFFleet is a fully managed API: you send an HTTP request and receive a PDF, with no servers, Docker, or DevOps to maintain. PDFFleet also adds API key management, usage metering, and Stripe-based billing that Gotenberg does not include."}},{"@type":"Question","name":"When should I use Gotenberg instead of PDFFleet?","acceptedAnswer":{"@type":"Answer","text":"If you already have DevOps infrastructure, run Docker containers, and want zero per-PDF cost, self-host Gotenberg — it is excellent software with over 71 million Docker Hub pulls. PDFFleet is for teams that want PDF generation as a service: no infrastructure to maintain, no Chromium security updates to track, and built-in API keys and usage billing. The free tier (50 PDFs/month) lets you evaluate the managed experience at no cost."}},{"@type":"Question","name":"Why pay for PDFFleet if Gotenberg is free?","acceptedAnswer":{"@type":"Answer","text":"You are paying for the managed layer, not the rendering engine. With Gotenberg you provision a server or container, monitor it, handle Chromium dependency updates, implement your own API key system, and scale it yourself. PDFFleet handles all of that. At $9/month for 2,000 PDFs, the cost is typically far less than the engineering time to operate and monitor your own Chromium rendering fleet."}},{"@type":"Question","name":"Does PDFFleet use the same Chromium engine as Gotenberg?","acceptedAnswer":{"@type":"Answer","text":"Yes. Both PDFFleet and Gotenberg render PDFs using headless Chromium — the same engine that powers Google Chrome. This means identical CSS support, web font rendering, and print media handling. If your HTML renders correctly in Chrome, it will render identically through either tool."}},{"@type":"Question","name":"Can I migrate from Gotenberg to PDFFleet?","acceptedAnswer":{"@type":"Answer","text":"Yes. Since both use Chromium, your HTML and CSS need no changes. Replace your Gotenberg container endpoint with an authenticated POST to https://pdffleet.com/v1/pdf including your HTML payload. The PDF output will be visually identical because the rendering engine is the same."}}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"PDFFleet","item":"https://pdffleet.com/"},{"@type":"ListItem","position":2,"name":"Gotenberg alternative","item":"https://pdffleet.com/alternatives/gotenberg"}]}]}</script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#F4F6FA;--surface:#FFF;--navy:#0B1430;--navy-2:#14203F;--ink:#131A2B;--muted:#5A6478;--faint:#8C94A6;--rule:#E3E7EF;--rule-2:#CFD5E0;--blue:#2D5BFF;--blue-deep:#1B43E0;--blue-soft:rgba(45,91,255,0.08);--save:#0E9F6E;--save-bg:rgba(14,159,110,0.10);--del:#D8453A;--display:'Sora',system-ui,sans-serif;--body:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+html{scroll-behavior:smooth}body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding:0 28px}a{color:inherit}
+.eyebrow{font-family:var(--mono);font-size:0.72rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--blue)}
+.site-head{position:sticky;top:0;z-index:50;background:rgba(244,246,250,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+.site-head .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:700;font-size:1.12rem;letter-spacing:-0.02em;text-decoration:none;color:var(--navy)}
+.brand .mark{width:30px;height:30px;border-radius:8px;background:var(--navy);display:grid;place-items:center}.brand b{font-weight:800}
+.nav{display:flex;align-items:center;gap:24px}.nav a{font-size:0.9rem;font-weight:500;text-decoration:none;color:var(--muted)}.nav a:hover{color:var(--ink)}
+.nav .nav-cta{color:#fff;background:var(--blue);padding:9px 17px;border-radius:9px;font-weight:600;font-size:0.88rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:0.95rem;padding:13px 24px;border-radius:10px;text-decoration:none;border:1.5px solid transparent;cursor:pointer;transition:all .16s}
+.btn-solid{background:var(--blue);color:#fff;box-shadow:0 10px 24px -12px var(--blue)}.btn-solid:hover{background:var(--blue-deep);transform:translateY(-2px)}
+.btn-ghost{border-color:var(--rule-2);color:var(--ink);background:var(--surface)}.btn-ghost:hover{border-color:var(--blue);color:var(--blue)}
+.crumb{font-family:var(--mono);font-size:0.74rem;color:var(--faint);padding:24px 0 0}.crumb a{text-decoration:none}.crumb a:hover{color:var(--blue)}
+.hero{padding:28px 0 48px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;margin-bottom:20px;padding:5px 12px 5px 9px;background:var(--blue-soft);border:1px solid rgba(45,91,255,0.18);border-radius:30px}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 4px rgba(45,91,255,0.18)}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2rem,4.6vw,3.3rem);line-height:1.04;letter-spacing:-0.035em;margin-bottom:18px;color:var(--navy)}
+.hero h1 .hl{position:relative;color:var(--blue)}.hero h1 .hl::after{content:"";position:absolute;left:0;right:0;bottom:3px;height:7px;background:rgba(45,91,255,0.18);z-index:-1;border-radius:2px}
+.hero .lede{font-size:1.1rem;color:var(--muted);max-width:38em;margin-bottom:26px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.section{padding:26px 0 50px}
+.sec-head{margin-bottom:30px}.sec-head .eyebrow{display:block;margin-bottom:10px}
+.sec-head h2{font-family:var(--display);font-weight:700;font-size:clamp(1.5rem,3vw,2.1rem);letter-spacing:-0.03em;color:var(--navy)}
+.compare-card{background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:8px;box-shadow:0 20px 50px -36px rgba(11,20,48,0.4);overflow:hidden}
+.compare-wrap{overflow-x:auto}
+table.compare{width:100%;border-collapse:collapse;font-size:0.92rem}
+table.compare th,table.compare td{padding:15px 18px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
+table.compare thead th{font-family:var(--mono);font-size:0.72rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--faint)}
+table.compare thead th.us{color:var(--blue)}
+table.compare tbody tr:last-child td{border-bottom:none}
+table.compare td.us{background:var(--blue-soft)}
+table.compare .price{font-family:var(--mono);font-weight:600;font-size:1rem}table.compare td.us .price{color:var(--blue)}
+table.compare .saving{font-family:var(--mono);font-size:0.73rem;color:var(--save);display:block;margin-top:3px;font-weight:500}
+table.compare tbody td:first-child{font-weight:600;color:var(--navy)}
+table.compare .check{color:var(--save);font-weight:700}table.compare .cross{color:var(--del)}
+.note-box{background:var(--save-bg);border:1px solid rgba(14,159,110,0.22);border-radius:12px;padding:20px 24px;margin-top:8px}
+.note-box p{font-size:0.9rem;color:#0a7a55;line-height:1.6}
+.switch-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+@media(max-width:720px){.switch-grid{grid-template-columns:1fr}}
+.switch-card{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:24px}
+.switch-card h3{font-family:var(--display);font-weight:600;font-size:1.1rem;margin-bottom:10px;color:var(--navy)}
+.switch-card p{font-size:0.9rem;color:var(--muted);margin-bottom:12px}
+.switch-card .code{font-family:var(--mono);font-size:0.78rem;background:var(--navy);color:#A9C4FF;border-radius:8px;padding:12px 14px;overflow-x:auto}
+.faq{max-width:760px}
+.qa{border-bottom:1px solid var(--rule);padding:22px 0}
+.qa h3{font-family:var(--display);font-weight:600;font-size:1.05rem;margin-bottom:8px;color:var(--navy)}
+.qa p{color:var(--muted);font-size:0.94rem}
+.cta-strip{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;border-radius:20px;padding:48px 40px;text-align:center;position:relative;overflow:hidden}
+.cta-strip::before{content:"";position:absolute;top:-40%;right:-10%;width:360px;height:360px;background:radial-gradient(circle,rgba(45,91,255,0.35),transparent 70%)}
+.cta-strip h2{font-family:var(--display);font-weight:700;font-size:1.7rem;letter-spacing:-0.03em;margin-bottom:10px;position:relative}
+.cta-strip p{font-family:var(--mono);font-size:0.84rem;color:rgba(255,255,255,0.62);margin-bottom:24px;position:relative}
+.cta-strip .btn-solid{background:#fff;color:var(--navy);position:relative}
+.site-foot{border-top:1px solid var(--rule);padding:36px 0 52px;margin-top:40px}
+.site-foot .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.site-foot .meta{font-family:var(--mono);font-size:0.76rem;color:var(--faint)}
+.site-foot .links{display:flex;gap:20px;flex-wrap:wrap}
+.site-foot .links a{font-family:var(--mono);font-size:0.78rem;text-decoration:none;color:var(--muted)}.site-foot .links a:hover{color:var(--blue)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="site-head"><div class="wrap"><a href="/" class="brand"><span class="mark"><svg width="20" height="20" viewBox="0 0 32 32"><path d="M8 11h11M8 16h8M8 21h5" stroke="#2D5BFF" stroke-width="2.4" stroke-linecap="round"/><path d="M21 19l4-3-4-3z" fill="#2D5BFF"/></svg></span>PDF<b>Fleet</b></a><nav class="nav"><a href="/#compare" class="nav-link">vs incumbents</a><a href="/#pricing" class="nav-link">pricing</a><a href="/#pricing" class="nav-cta">Get a key &rarr;</a></nav></div></header>
+
+<div class="wrap"><p class="crumb"><a href="/">PDFFleet</a> / Gotenberg alternative</p></div>
+
+<section class="hero"><div class="wrap">
+  <span class="hero-eyebrow"><span class="dot"></span><span class="eyebrow">Gotenberg alternative &mdash; managed vs self-hosted</span></span>
+  <h1>The <span class="hl">managed</span> alternative<br>to self-hosting Gotenberg.</h1>
+  <p class="lede">Gotenberg is excellent open-source software &mdash; the same headless Chromium engine PDFFleet runs. The difference is deployment: Gotenberg means your own Docker containers, your own monitoring, your own API key system. PDFFleet is that same engine, fully managed &mdash; an HTTP request in, a PDF out, no DevOps required.</p>
+  <div class="hero-actions"><a href="/#pricing" class="btn btn-solid">See pricing &rarr;</a><a href="/docs" class="btn btn-ghost">Read the API docs</a></div>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow">honest comparison</span><h2>PDFFleet vs Gotenberg</h2></div>
+  <div class="note-box"><p><strong>Full disclosure:</strong> Gotenberg is free, open-source, and widely trusted (71M+ Docker Hub pulls, 12K+ GitHub stars). Both tools render with the same headless Chromium engine. PDFFleet is not "better" at rendering &mdash; it removes the operational burden of running Gotenberg yourself.</p></div>
+  <div class="compare-card" style="margin-top:22px"><div class="compare-wrap"><table class="compare">
+    <thead><tr><th>&nbsp;</th><th>Gotenberg (self-hosted)</th><th class="us">PDFFleet (managed)</th></tr></thead>
+    <tbody>
+      <tr><td>Render engine</td><td>Headless Chromium</td><td class="us">Headless Chromium<span class="saving">identical engine</span></td></tr>
+      <tr><td>Cost</td><td><span class="price">$0</span> (open-source)</td><td class="us"><span class="price">$0&ndash;$29/mo</span></td></tr>
+      <tr><td>Free tier</td><td>Unlimited (you host it)</td><td class="us">50 PDFs/mo free</td></tr>
+      <tr><td>Deployment</td><td><span class="cross">&#10007;</span> Run your own Docker container</td><td class="us"><span class="check">&check;</span> Zero deployment &mdash; just an API call</td></tr>
+      <tr><td>Server / infrastructure</td><td><span class="cross">&#10007;</span> You provision, monitor, scale</td><td class="us"><span class="check">&check;</span> Managed &mdash; nothing to provision</td></tr>
+      <tr><td>API key management</td><td><span class="cross">&#10007;</span> Build it yourself</td><td class="us"><span class="check">&check;</span> Built-in key generation &amp; auth</td></tr>
+      <tr><td>Usage metering &amp; billing</td><td><span class="cross">&#10007;</span> Build it yourself</td><td class="us"><span class="check">&check;</span> Built-in usage tracking + Stripe</td></tr>
+      <tr><td>Chromium security updates</td><td><span class="cross">&#10007;</span> You track and rebuild</td><td class="us"><span class="check">&check;</span> Handled automatically</td></tr>
+      <tr><td>HTML / URL / template input</td><td><span class="check">&check;</span></td><td class="us"><span class="check">&check;</span></td></tr>
+      <tr><td>Markdown / screenshot capture</td><td><span class="check">&check;</span></td><td class="us">HTML / URL / templates</td></tr>
+      <tr><td>Best for</td><td>Teams with DevOps capacity</td><td class="us">Teams that want PDF as a service</td></tr>
+    </tbody>
+  </table></div></div>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow">when each makes sense</span><h2>Should you self-host or go managed?</h2></div>
+  <div class="switch-grid">
+    <div class="switch-card"><h3>Self-host Gotenberg if&hellip;</h3><p>You have DevOps infrastructure, run Docker in production, and want zero per-PDF cost at any scale. You are comfortable maintaining Chromium dependencies, implementing your own API key and rate-limiting layer, and monitoring uptime yourself.</p></div>
+    <div class="switch-card"><h3>Use PDFFleet if&hellip;</h3><p>You want to send an HTTP request and get a PDF back &mdash; no servers, no Docker, no Chromium to update. You need API keys, usage metering, and billing handled for you. At $9/mo for 2,000 PDFs, the managed layer typically costs less than the engineering hours to operate your own render fleet.</p></div>
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow">migration</span><h2>Same engine, one-line switch</h2></div>
+  <p style="font-size:0.95rem;color:var(--muted);max-width:38em;margin-bottom:22px">Since both use headless Chromium, your HTML and CSS need no changes. Replace your Gotenberg endpoint with an authenticated PDFFleet request.</p>
+  <div class="switch-grid">
+    <div class="switch-card"><h3>Before &mdash; Gotenberg</h3><p>POST to your self-hosted container.</p><div class="code">POST http://your-server:3000/forms/chromium/html<br>{"files":["index.html"]}</div></div>
+    <div class="switch-card"><h3>After &mdash; PDFFleet</h3><p>POST with HTML and your API key.</p><div class="code">POST https://pdffleet.com/v1/pdf<br>X-API-Key: pf_yourkey<br>{"html":"&lt;html&gt;..."}</div></div>
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow">faq</span><h2>Gotenberg vs PDFFleet &mdash; questions</h2></div>
+  <div class="faq">
+    <div class="qa"><h3>Is PDFFleet the same as Gotenberg?</h3><p>Both render HTML to PDF using headless Chromium &mdash; the same browser engine. The difference is deployment: Gotenberg is free, open-source software you run yourself inside a Docker container. PDFFleet is a fully managed API: you send an HTTP request and receive a PDF, with no servers, Docker, or DevOps to maintain. PDFFleet also adds API key management, usage metering, and Stripe-based billing that Gotenberg does not include.</p></div>
+    <div class="qa"><h3>When should I use Gotenberg instead of PDFFleet?</h3><p>If you already have DevOps infrastructure, run Docker containers, and want zero per-PDF cost, self-host Gotenberg &mdash; it is excellent software with over 71 million Docker Hub pulls. PDFFleet is for teams that want PDF generation as a service: no infrastructure to maintain, no Chromium security updates to track, and built-in API keys and usage billing. The free tier (50 PDFs/month) lets you evaluate the managed experience at no cost.</p></div>
+    <div class="qa"><h3>Why pay for PDFFleet if Gotenberg is free?</h3><p>You are paying for the managed layer, not the rendering engine. With Gotenberg you provision a server or container, monitor it, handle Chromium dependency updates, implement your own API key system, and scale it yourself. PDFFleet handles all of that. At $9/month for 2,000 PDFs, the cost is typically far less than the engineering time to operate and monitor your own Chromium rendering fleet.</p></div>
+    <div class="qa"><h3>Does PDFFleet use the same Chromium engine as Gotenberg?</h3><p>Yes. Both PDFFleet and Gotenberg render PDFs using headless Chromium &mdash; the same engine that powers Google Chrome. This means identical CSS support, web font rendering, and print media handling. If your HTML renders correctly in Chrome, it will render identically through either tool.</p></div>
+    <div class="qa"><h3>Can I migrate from Gotenberg to PDFFleet?</h3><p>Yes. Since both use Chromium, your HTML and CSS need no changes. Replace your Gotenberg container endpoint with an authenticated POST to https://pdffleet.com/v1/pdf including your HTML payload. The PDF output will be visually identical because the rendering engine is the same.</p></div>
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap"><div class="cta-strip">
+  <h2>The same engine. Zero DevOps.</h2>
+  <p>Start free with 50 PDFs/mo &middot; $9/mo for 2,000 &middot; same Chromium as Gotenberg</p>
+  <a href="/#pricing" class="btn btn-solid">Get started &rarr;</a>
+</div></div></section>
+
+<footer class="site-foot"><div class="wrap"><span class="meta">&copy; 2026 PDFFleet &middot; managed HTML-to-PDF API</span><div class="links"><a href="/">home</a><a href="/#pricing">pricing</a><a href="/alternatives/apitemplate">APITemplate alternative</a><a href="/alternatives/pdfmonkey">PDFMonkey alternative</a><a href="/alternatives/docraptor">DocRaptor alternative</a><a href="/alternatives/paperplane">Paperplane alternative</a></div></div></footer>
+</body>
+</html>
