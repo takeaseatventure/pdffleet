@@ -190,6 +190,18 @@
     .site-foot .links a { font-family: var(--mono); font-size: 0.78rem; text-decoration: none; color: var(--muted); }
     .site-foot .links a:hover { color: var(--blue); }
 
+    /* signup */
+    .signup { display: flex; gap: 12px; max-width: 520px; margin: 0 auto; flex-wrap: wrap; }
+    .signup input { flex: 1; min-width: 220px; font-family: var(--body); font-size: 0.98rem; padding: 13px 16px; border: 1.5px solid var(--rule-2); border-radius: 10px; background: var(--surface); color: var(--ink); }
+    .signup input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
+    .signup button { white-space: nowrap; }
+    .signup-error { max-width: 520px; margin: 14px auto 0; text-align: center; color: #D8453A; font-size: 0.9rem; }
+    .signup-result { max-width: 660px; margin: 22px auto 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 24px; box-shadow: 0 20px 50px -36px rgba(11,20,48,0.4); }
+    .signup-result .lbl { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--save); margin-bottom: 12px; }
+    .key-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .key-row code { flex: 1; min-width: 240px; font-family: var(--mono); font-size: 0.9rem; background: var(--navy); color: #A9C4FF; padding: 12px 14px; border-radius: 9px; overflow-x: auto; word-break: break-all; }
+    .signup-result .hint { margin-top: 14px; font-size: 0.85rem; color: var(--muted); }
+    .signup-result .hint code { font-family: var(--mono); font-size: 0.77rem; color: var(--ink); background: var(--surface-2); padding: 3px 7px; border-radius: 5px; word-break: break-all; }
     :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
     @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } html { scroll-behavior: auto; } }
   </style>
@@ -220,7 +232,7 @@
         <h1>The PDF API that costs <span class="half">half</span>.</h1>
         <p class="lede">PDFFleet turns HTML, a URL, or a template into a pixel-perfect PDF via headless Chromium — one fast REST call. We run it on our own metal instead of VC-funded cloud, so every tier is <b>50–70% cheaper</b> than APITemplate, PDFMonkey, and Paperplane. No per-render markup, no surprise overages.</p>
         <div class="hero-actions">
-          <a href="#pricing" class="btn btn-solid">Start free — 50 PDFs/mo →</a>
+          <a href="#get-key" class="btn btn-solid">Start free — 50 PDFs/mo →</a>
           <a href="#docs" class="btn btn-ghost">Read the docs</a>
         </div>
         <div class="specs">
@@ -362,7 +374,7 @@
           <li>All page sizes + options</li>
           <li>Community support</li>
         </ul>
-        <a href="#docs" class="btn btn-ghost pc-cta">Get free key →</a>
+        <a href="#get-key" class="btn btn-ghost pc-cta">Get free key →</a>
       </div>
       <div class="price-card feature">
         <span class="flag">Best value</span>
@@ -395,6 +407,21 @@
       </div>
     </div>
     <p class="pricing-note">Need more than 50,000/mo? Contact us for a custom volume tier. No per-document overage fees — ever.</p>
+  </div>
+</section>
+
+<!-- GET KEY -->
+<section class="section" id="get-key">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">free · no credit card</span>
+      <h2>Get your free API key</h2>
+      <p>Sign in with Google or GitHub — your free key (50 PDFs/month) is waiting on your dashboard.</p>
+    </div>
+    <div style="text-align:center">
+      <a href="/auth/login" class="btn btn-solid" style="font-size:1rem;padding:14px 32px">Sign in to get your key →</a>
+      <p style="margin-top:14px;font-family:var(--mono);font-size:.8rem;color:var(--faint)">Google &amp; GitHub · no password · no credit card</p>
+    </div>
   </div>
 </section>
 
@@ -440,7 +467,7 @@ curl https://pdffleet.com/v1/usage \
     <div class="cta-strip">
       <h2>Start rendering in 60 seconds</h2>
       <p>50 free PDFs/mo · no credit card · swap your endpoint and save 50–70%</p>
-      <a href="#pricing" class="btn btn-solid">Get your API key →</a>
+      <a href="#get-key" class="btn btn-solid">Get your API key →</a>
     </div>
   </div>
 </section>
@@ -458,6 +485,7 @@ curl https://pdffleet.com/v1/usage \
     </div>
   </div>
 </footer>
+
 
 </body>
 </html>

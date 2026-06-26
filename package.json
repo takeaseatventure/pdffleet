@@ -1,15 +1,17 @@
 {
   "name": "pdffleet-api",
-  "version": "1.0.0",
-  "description": "PDF generation API — render HTML/URL to PDF via headless Chromium. Self-hosted, undercutting APITemplate/PDFMonkey/Paperplane.",
+  "version": "2.0.0",
+  "description": "PDF generation API — render HTML/URL to PDF via headless Chromium. Accounts via SSO, Postgres storage, Stripe billing. Undercuts APITemplate/PDFMonkey/Paperplane.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node test/run.js",
     "install-browser": "playwright install chromium --with-deps"
   },
   "dependencies": {
-    "playwright": "^1.48.0"
+    "playwright": "^1.48.0",
+    "pg": "^8.13.0",
+    "openid-client": "^5.7.0",
+    "jsonwebtoken": "^9.0.2"
   },
   "engines": {
     "node": ">=20"
