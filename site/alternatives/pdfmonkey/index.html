@@ -29,7 +29,7 @@ html{scroll-behavior:smooth}body{font-family:var(--body);background:var(--bg);co
 .brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:700;font-size:1.12rem;letter-spacing:-0.02em;text-decoration:none;color:var(--navy)}
 .brand .mark{width:30px;height:30px;border-radius:8px;background:var(--navy);display:grid;place-items:center}.brand b{font-weight:800}
 .nav{display:flex;align-items:center;gap:24px}.nav a{font-size:0.9rem;font-weight:500;text-decoration:none;color:var(--muted)}.nav a:hover{color:var(--ink)}
-.nav .nav-cta{color:#fff;background:var(--blue);padding:9px 17px;border-radius:9px;font-weight:600;font-size:0.88rem}
+.nav .nav-cta{color:#fff;background:var(--blue);padding:9px 17px;border-radius:9px;font-weight:600;font-size:0.88rem;white-space:nowrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:0.95rem;padding:13px 24px;border-radius:10px;text-decoration:none;border:1.5px solid transparent;cursor:pointer;transition:all .16s}
 .btn-solid{background:var(--blue);color:#fff;box-shadow:0 10px 24px -12px var(--blue)}.btn-solid:hover{background:var(--blue-deep);transform:translateY(-2px)}
 .btn-ghost{border-color:var(--rule-2);color:var(--ink);background:var(--surface)}.btn-ghost:hover{border-color:var(--blue);color:var(--blue)}
@@ -57,7 +57,7 @@ table.compare .saving{font-family:var(--mono);font-size:0.73rem;color:var(--save
 table.compare tbody td:first-child{font-weight:600;color:var(--navy)}
 table.compare .check{color:var(--save);font-weight:700}table.compare .cross{color:var(--del)}
 .switch-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
-@media(max-width:720px){.switch-grid{grid-template-columns:1fr}}
+@media(max-width:720px){.switch-grid{grid-template-columns:1fr}.switch-grid>*{min-width:0}}
 .switch-card{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:24px}
 .switch-card h3{font-family:var(--display);font-weight:600;font-size:1.1rem;margin-bottom:10px;color:var(--navy)}
 .switch-card p{font-size:0.9rem;color:var(--muted);margin-bottom:12px}
@@ -77,7 +77,7 @@ table.compare .check{color:var(--save);font-weight:700}table.compare .cross{colo
 .site-foot .links{display:flex;gap:20px;flex-wrap:wrap}
 .site-foot .links a{font-family:var(--mono);font-size:0.78rem;text-decoration:none;color:var(--muted)}.site-foot .links a:hover{color:var(--blue)}
 :focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:600px){.nav .nav-link{display:none}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>

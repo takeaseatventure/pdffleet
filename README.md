@@ -5,7 +5,7 @@
 [![Live](https://img.shields.io/badge/status-live-brightgreen)](https://pdffleet.com)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Live at **[pdffleet.com](https://pdffleet.com)** — 50 free PDFs/month, paid from $9/mo for 2,000.
+Live at **[pdffleet.com](https://pdffleet.com)** — 100 free PDFs/month, paid from $4/mo for 10,000.
 
 PDFFleet renders HTML, URLs, and templates to PDF using headless Chromium (Playwright) in a
 Docker container. It includes API-key authentication, per-tier rate limiting, monthly usage
@@ -14,15 +14,15 @@ server source so you can self-host it.
 
 ## Why?
 
-Incumbent PDF APIs (APITemplate.io, PDFMonkey, Paperplane, DocRaptor) charge $15–$49/mo for
-500–1,250 PDFs. PDFFleet self-hosts on a single VM with bare-metal Chromium, so the marginal
-cost of a render is effectively zero — and the pricing reflects that:
+Incumbent PDF APIs (APITemplate.io, PDFMonkey, DocRaptor) charge $19–$49/mo for
+500–3,000 PDFs. PDFFleet renders with the same headless Chromium engine but at a fraction of
+the price:
 
 | Tier   | PDFs/month | Price    |
 |--------|-----------|----------|
-| Free   | 50        | $0       |
-| Hobby  | 2,000     | $9/mo    |
-| Pro    | 50,000    | $29/mo   |
+| Free   | 100       | $0       |
+| Hobby  | 10,000    | $4/mo    |
+| Pro    | 150,000   | $29/mo   |
 
 See the full **[comparison with incumbents →](https://pdffleet.com/#compare)** and the
 **[API reference →](https://pdffleet.com/docs)**.
@@ -58,13 +58,13 @@ docker build -t pdffleet-api .
 # Run (Chromium needs --no-sandbox in containers)
 docker run -d --name pdffleet \
   -p 8090:8080 \
-  -v /path/to/data:/data \
   -e ADMIN_KEY=your-admin-key \
+  -e DATABASE_URL=postgres://... \
   --restart unless-stopped \
   pdffleet-api
 ```
 
-The `/data` volume holds `api_keys.json` and any stored HTML templates.
+User data (API keys, usage, templates) is stored in a Postgres database via `DATABASE_URL`.
 
 ## Tech stack
 
