@@ -79,7 +79,7 @@
     .nav { display: flex; align-items: center; gap: 26px; }
     .nav a { font-family: var(--body); font-size: 0.9rem; font-weight: 500; text-decoration: none; color: var(--muted); transition: color .15s; }
     .nav a:hover { color: var(--ink); }
-    .nav .nav-cta { font-family: var(--body); font-weight: 600; font-size: 0.88rem; color: #fff; background: var(--blue); padding: 9px 17px; border-radius: 9px; box-shadow: 0 6px 16px -8px var(--blue); transition: background .15s, transform .15s; }
+    .nav .nav-cta { font-family: var(--body); font-weight: 600; font-size: 0.88rem; color: #fff; background: var(--blue); padding: 9px 17px; border-radius: 9px; white-space: nowrap; box-shadow: 0 6px 16px -8px var(--blue); transition: background .15s, transform .15s; }
     .nav .nav-cta:hover { background: var(--blue-deep); transform: translateY(-1px); }
     @media (max-width: 720px) { .nav .nav-link { display: none; } }
 
@@ -102,7 +102,7 @@
     .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; }
     .specs { display: flex; flex-wrap: wrap; gap: 9px 12px; }
     .specs span { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); background: var(--surface); border: 1px solid var(--rule); padding: 6px 11px; border-radius: 7px; }
-    @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; gap: 36px; } .hero { padding: 56px 0 44px; } }
+    @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; gap: 36px; } .hero-grid > * { min-width: 0; } .hero { padding: 56px 0 44px; } }
 
     /* terminal */
     .terminal { background: var(--navy); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 60px -28px rgba(11,20,48,0.55); font-family: var(--mono); font-size: 0.82rem; border: 1px solid rgba(255,255,255,0.06); }
@@ -138,7 +138,7 @@
 
     /* features */
     .feat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-    @media (max-width: 720px) { .feat-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 720px) { .feat-grid { grid-template-columns: 1fr; } .feat-grid > * { min-width: 0; } }
     .feat { background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 26px; transition: border-color .16s, transform .16s, box-shadow .16s; }
     .feat:hover { border-color: var(--blue); transform: translateY(-3px); box-shadow: 0 20px 40px -30px rgba(45,91,255,0.5); }
     .feat .fnum { font-family: var(--mono); font-size: 0.78rem; font-weight: 600; color: var(--blue); margin-bottom: 12px; }

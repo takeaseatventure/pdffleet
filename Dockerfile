@@ -31,15 +31,18 @@ WORKDIR /app
 
 # Install app deps first (cache layer)
 COPY package.json ./
-RUN npm install --omit=dev && npx playwright install chromium
+# install Chromium into a shared, world-readable path so the non-root user can launch it
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+RUN npm install --omit=dev && npx playwright install chromium && chmod -R a+rX /ms-playwright
 
 # Copy app code
 COPY server.js ./
 COPY site/ ./site/
 COPY templates/ ./data/templates/
 
-# Persistent data volume (API keys, templates)
-RUN mkdir -p /data/templates
+# Persistent data volume (API keys, templates); run as the unprivileged node user (uid 1000)
+RUN mkdir -p /data/templates && chown -R node:node /app /data
+USER node
 VOLUME ["/data"]
 
 EXPOSE 8080
