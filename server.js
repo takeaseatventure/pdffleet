@@ -186,6 +186,9 @@ async function isBlockedSSRF(targetUrl) {
 
 // HTML-escape helper for safe interpolation into the dashboard template
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+const _iprl = new Map();
+function clientIp(req){ return (String(req.headers['x-forwarded-for']||'').split(',')[0].trim()) || (req.socket && req.socket.remoteAddress) || 'unknown'; }
+function ipRateLimit(key, max, windowMs){ const now=Date.now(); let e=_iprl.get(key); if(!e||now>e.reset){ e={c:0,reset:now+windowMs}; _iprl.set(key,e);} if(_iprl.size>10000){ for(const [k,v] of _iprl) if(now>v.reset) _iprl.delete(k);} e.c++; return e.c<=max; }
 
 async function renderToPDF({ html, url, template, data, options }) {
   if (!html && !url && !template) { const e = new Error('Provide one of: html, url, or template'); e.statusCode = 422; throw e; }
@@ -264,7 +267,8 @@ function readBody(req) {
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'application/javascript', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon', '.txt': 'text/plain', '.xml': 'application/xml' };
 const STATIC_DIR = process.env.STATIC_DIR || path.join(__dirname, 'site');
 function serveStatic(req, res, pathname) {
-  if (req.method !== 'GET' || pathname.startsWith('/v1/') || pathname.startsWith('/auth/') || pathname === '/dashboard') return false;
+  const isHead = req.method === 'HEAD';
+  if (!(req.method === 'GET' || isHead) || pathname.startsWith('/v1/') || pathname.startsWith('/auth/') || pathname === '/dashboard') return false;
   let filePath = path.join(STATIC_DIR, pathname);
   if (!filePath.startsWith(STATIC_DIR)) return false;
   try { if (fs.statSync(filePath).isDirectory()) filePath = path.join(filePath, 'index.html'); }
@@ -272,7 +276,7 @@ function serveStatic(req, res, pathname) {
   try {
     const data = fs.readFileSync(filePath);
     res.writeHead(200, { 'Content-Type': MIME[path.extname(filePath).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'public, max-age=300' });
-    res.end(data); return true;
+    res.end(isHead ? undefined : data); return true;
   } catch { return false; }
 }
 
@@ -396,6 +400,7 @@ const server = http.createServer(async (req, res) => {
 
     // ---- render: POST /v1/pdf (key auth) ----
     if (req.method === 'POST' && pathname === '/v1/pdf') {
+      if (!ipRateLimit('pf:'+clientIp(req), 120, 60000)) return sendJSON(res, 429, { error: 'rate_limited', message: 'too many requests from your IP, slow down' });
       const k = await keyAuth(req);
       if (!k) return sendJSON(res, 401, { error: 'unauthorized', message: `Get a key by signing in at ${BASE_URL}/auth/login` });
       const rl = rateCheck(k.key, k.tier);
