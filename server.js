@@ -13,7 +13,15 @@ const jwt = require('jsonwebtoken');
 // --------------------------------------------------------------------------- config
 const PORT = parseInt(process.env.PORT || '8080', 10);
 const BASE_URL = process.env.BASE_URL || 'https://pdffleet.com';
-const SESSION_SECRET = process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
+const SESSION_SECRET = process.env.SESSION_SECRET || (() => { throw new Error('SESSION_SECRET is required'); })();
+const BILLING_SECRET = process.env.BILLING_SECRET || (() => { throw new Error('BILLING_SECRET is required'); })();
+const BILLING_CHECKOUT = process.env.BILLING_CHECKOUT || 'https://billing.takeaseatventure.com/checkout';
+function checkoutUrl(product, plan, user, email) {
+  const exp = Date.now() + 3600000;
+  const sig = crypto.createHmac('sha256', BILLING_SECRET).update(`${product}:${plan}:${user}:${exp}`).digest('hex');
+  const q = new URLSearchParams({ product, plan, user, email: email||'', exp: String(exp), sig });
+  return `${BILLING_CHECKOUT}?${q.toString()}`;
+}
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
 const STRIPE_LINK_HOBBY = process.env.STRIPE_LINK_HOBBY || 'https://buy.stripe.com/14AfZg79kepZ3b9cMr9Zm07';
 const STRIPE_LINK_PRO = process.env.STRIPE_LINK_PRO || 'https://buy.stripe.com/28EbJ0alw3LlaDBeUz9Zm08';
@@ -116,7 +124,7 @@ function setCookie(res, name, val, maxAge) {
   res.setHeader('Set-Cookie', [...(Array.isArray(prev) ? prev : [prev]).filter(Boolean), parts.join('; ')]);
 }
 function sessionUser(req) {
-  try { return jwt.verify(parseCookies(req).pf_session || '', SESSION_SECRET).uid; } catch { return null; }
+  try { return jwt.verify(parseCookies(req).pf_session || '', SESSION_SECRET, {algorithms:['HS256']}).uid; } catch { return null; }
 }
 
 // --------------------------------------------------------------------------- renderer (headless chromium)
@@ -140,6 +148,22 @@ const BLOCKED_HOSTS = new Set([
 ]);
 const PRIVATE_IP_RE = /^(10\.|127\.|169\.254\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.|0\.|::1|fc00:|fd|fe80:)/i;
 const MAX_URL_LENGTH = 2048;
+let activeRenders = 0; const MAX_RENDERS = parseInt(process.env.MAX_RENDERS || '4', 10);
+function isPrivateIp(ip) {
+  if (!ip) return true;
+  ip = String(ip).toLowerCase();
+  if (ip.startsWith('::ffff:')) {
+    const tail = ip.slice(7);
+    if (/^\d+\.\d+\.\d+\.\d+$/.test(tail)) ip = tail;
+    else if (/^[0-9a-f]+:[0-9a-f]+$/.test(tail)) { const [hi,lo]=tail.split(':').map(x=>parseInt(x,16)); ip=[(hi>>8)&255,hi&255,(lo>>8)&255,lo&255].join('.'); }
+  }
+  const net = require('net');
+  if (net.isIPv4(ip)) { const o = ip.split('.').map(Number);
+    return o[0]===0||o[0]===10||o[0]===127||(o[0]===169&&o[1]===254)||(o[0]===172&&o[1]>=16&&o[1]<=31)||(o[0]===192&&o[1]===168)||(o[0]===100&&o[1]>=64&&o[1]<=127)||o[0]>=224; }
+  if (ip==='::1'||ip==='::'||ip==='0:0:0:0:0:0:0:1'||ip==='0:0:0:0:0:0:0:0') return true;
+  if (/^(fc|fd|fe80:|ff)/.test(ip)) return true;
+  return false;
+}
 
 async function isBlockedSSRF(targetUrl) {
   let parsed;
@@ -149,16 +173,14 @@ async function isBlockedSSRF(targetUrl) {
   if (targetUrl.length > MAX_URL_LENGTH) return 'url_too_long';
   const host = parsed.hostname.toLowerCase().replace(/^\[|\]$/g, '');
   if (BLOCKED_HOSTS.has(host)) return `blocked_host:${host}`;
-  if (PRIVATE_IP_RE.test(host)) return `private_ip:${host}`;
-  // resolve hostname and check the actual IP (prevents DNS rebinding tricks)
+  const net = require('net');
+  if (net.isIP(host)) return isPrivateIp(host) ? `private_ip:${host}` : null;
+  // resolve hostname and check the actual IP(s)
   try {
     const dns = require('dns');
     const addrs = await dns.promises.lookup(host, { all: true });
-    for (const a of addrs) {
-      const ip = a.address;
-      if (PRIVATE_IP_RE.test(ip) || ip === '169.254.169.254') return `resolved_private:${host}->${ip}`;
-    }
-  } catch { /* DNS failure — let the browser fail naturally */ }
+    for (const a of addrs) if (isPrivateIp(a.address)) return `resolved_private:${host}->${a.address}`;
+  } catch { /* DNS failure — browser will fail to connect anyway */ }
   return null;
 }
 
@@ -187,15 +209,26 @@ async function renderToPDF({ html, url, template, data, options }) {
   }
   const pageOptions = { format: 'A4', printBackground: true, margin: { top: '20px', right: '20px', bottom: '20px', left: '20px' }, ...(options || {}) };
   if (pageOptions.format && !VALID_FORMATS.includes(pageOptions.format)) { const e = new Error(`invalid format: ${pageOptions.format}`); e.statusCode = 422; throw e; }
-  const browser = await getBrowser();
-  const ctx = await browser.newContext();
-  const page = await ctx.newPage();
+  if (activeRenders >= MAX_RENDERS) { const e = new Error('server busy — too many concurrent renders, retry shortly'); e.statusCode = 503; throw e; }
+  activeRenders++;
   try {
-    if (url) await page.goto(url, { waitUntil: 'networkidle', timeout: RENDER_TIMEOUT_MS });
-    else await page.setContent(html, { waitUntil: 'networkidle', timeout: RENDER_TIMEOUT_MS });
-    if (pageOptions.waitForSelector) { await page.waitForSelector(pageOptions.waitForSelector, { timeout: RENDER_TIMEOUT_MS }); delete pageOptions.waitForSelector; }
-    return await page.pdf(pageOptions);
-  } finally { await ctx.close(); }
+    const browser = await getBrowser();
+    const ctx = await browser.newContext();
+    // SSRF guard on EVERY request the browser makes — top page, subresources (img/iframe/fetch/css), and redirect targets — for url/html/template alike
+    await ctx.route('**/*', async (route) => {
+      const reqUrl = route.request().url();
+      if (/^(data|about|blob):/i.test(reqUrl)) { try { return await route.continue(); } catch { return; } }
+      let bad = null; try { bad = await isBlockedSSRF(reqUrl); } catch { bad = 'check_error'; }
+      try { return bad ? await route.abort('blockedbyclient') : await route.continue(); } catch { return; }
+    });
+    const page = await ctx.newPage();
+    try {
+      if (url) await page.goto(url, { waitUntil: 'networkidle', timeout: RENDER_TIMEOUT_MS });
+      else await page.setContent(html, { waitUntil: 'networkidle', timeout: RENDER_TIMEOUT_MS });
+      if (pageOptions.waitForSelector) { await page.waitForSelector(pageOptions.waitForSelector, { timeout: RENDER_TIMEOUT_MS }); delete pageOptions.waitForSelector; }
+      return await page.pdf(pageOptions);
+    } finally { await ctx.close(); }
+  } finally { activeRenders--; }
 }
 
 // in-memory per-minute rate limiter
@@ -279,7 +312,7 @@ h1{font-family:Sora;font-weight:700;font-size:1.7rem;letter-spacing:-.03em;color
 <p class="hint">Use it: <code>curl -X POST ${eBase}/v1/pdf -H "Authorization: Bearer ${eKey}" -H "Content-Type: application/json" -d '{"html":"&lt;h1&gt;Hi&lt;/h1&gt;"}' -o out.pdf</code></p></div>
 <div class="card"><div class="lbl">Plan &amp; usage</div><span class="plan">${ePlan.toUpperCase()}</span>
 <div class="bar"><i></i></div><p style="font-size:.86rem;color:var(--muted)">${used} / ${limit} PDFs this month</p>
-${isPaid ? '' : `<div class="up"><a class="btn btn-blue" href="https://billing.takeaseatventure.com/checkout?product=pdffleet&plan=hobby&user=${encodeURIComponent(eUid)}&email=${encodeURIComponent(eEmail)}">Upgrade to Hobby \u2014 $4/mo</a><a class="btn" href="https://billing.takeaseatventure.com/checkout?product=pdffleet&plan=pro&user=${encodeURIComponent(eUid)}&email=${encodeURIComponent(eEmail)}">Pro \u2014 $29/mo</a></div>`}</div>
+${isPaid ? '' : `<div class="up"><a class="btn btn-blue" href="${checkoutUrl('pdffleet','hobby',eUid,eEmail)}">Upgrade to Hobby \u2014 $4/mo</a><a class="btn" href="${checkoutUrl('pdffleet','pro',eUid,eEmail)}">Pro \u2014 $29/mo</a></div>`}</div>
 </main></body></html>`;
 }
 
@@ -315,7 +348,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && pathname === '/auth/callback') {
       if (!oidc) return sendJSON(res, 503, { error: 'auth_unavailable' });
       let chk;
-      try { chk = jwt.verify(parseCookies(req).pf_oidc || '', SESSION_SECRET); } catch { return redirect(res, '/auth/login'); }
+      try { chk = jwt.verify(parseCookies(req).pf_oidc || '', SESSION_SECRET, {algorithms:['HS256']}); } catch { return redirect(res, '/auth/login'); }
       try {
         const params = oidc.callbackParams(req);
         const tokenSet = await oidc.callback(BASE_URL + '/auth/callback', params, { state: chk.state, nonce: chk.nonce });
@@ -346,7 +379,7 @@ const server = http.createServer(async (req, res) => {
 
     // ---- internal billing entitlement push (from the central payment service; not Stripe) ----
     if (req.method === 'POST' && pathname === '/internal/billing') {
-      if (req.headers['x-billing-secret'] !== process.env.BILLING_SECRET) return sendJSON(res, 401, { error: 'unauthorized' });
+      { const got=Buffer.from(String(req.headers['x-billing-secret']||'')), want=Buffer.from(BILLING_SECRET); if (got.length!==want.length || !crypto.timingSafeEqual(got,want)) return sendJSON(res, 401, { error: 'unauthorized' }); }
       let b; try { b = JSON.parse(await readBody(req)); } catch { return sendJSON(res, 400, { error: 'bad_json' }); }
       const PLANS = { free: { tier: 'free', limit: FREE_MONTHLY }, hobby: { tier: 'pro', limit: 10000 }, pro: { tier: 'pro', limit: PRO_MONTHLY } };
       const pl = PLANS[b.plan] || PLANS.free;
