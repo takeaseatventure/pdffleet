@@ -17,7 +17,7 @@ const SESSION_SECRET = process.env.SESSION_SECRET || crypto.randomBytes(32).toSt
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
 const STRIPE_LINK_HOBBY = process.env.STRIPE_LINK_HOBBY || 'https://buy.stripe.com/14AfZg79kepZ3b9cMr9Zm07';
 const STRIPE_LINK_PRO = process.env.STRIPE_LINK_PRO || 'https://buy.stripe.com/28EbJ0alw3LlaDBeUz9Zm08';
-const FREE_RPM = 20, PRO_RPM = 300, FREE_MONTHLY = 50, PRO_MONTHLY = 50000;
+const FREE_RPM = 20, PRO_RPM = 300, FREE_MONTHLY = 100, PRO_MONTHLY = 150000;
 const MAX_BODY = 10 * 1024 * 1024;
 const RENDER_TIMEOUT_MS = parseInt(process.env.RENDER_TIMEOUT_MS || '30000', 10);
 
@@ -279,7 +279,7 @@ h1{font-family:Sora;font-weight:700;font-size:1.7rem;letter-spacing:-.03em;color
 <p class="hint">Use it: <code>curl -X POST ${eBase}/v1/pdf -H "Authorization: Bearer ${eKey}" -H "Content-Type: application/json" -d '{"html":"&lt;h1&gt;Hi&lt;/h1&gt;"}' -o out.pdf</code></p></div>
 <div class="card"><div class="lbl">Plan &amp; usage</div><span class="plan">${ePlan.toUpperCase()}</span>
 <div class="bar"><i></i></div><p style="font-size:.86rem;color:var(--muted)">${used} / ${limit} PDFs this month</p>
-${isPaid ? '' : `<div class="up"><a class="btn btn-blue" href="${STRIPE_LINK_HOBBY}${ref}">Upgrade to Hobby \u2014 $9/mo</a><a class="btn" href="${STRIPE_LINK_PRO}${ref}">Pro \u2014 $29/mo</a></div>`}</div>
+${isPaid ? '' : `<div class="up"><a class="btn btn-blue" href="https://billing.takeaseatventure.com/checkout?product=pdffleet&plan=hobby&user=${encodeURIComponent(eUid)}&email=${encodeURIComponent(eEmail)}">Upgrade to Hobby \u2014 $4/mo</a><a class="btn" href="https://billing.takeaseatventure.com/checkout?product=pdffleet&plan=pro&user=${encodeURIComponent(eUid)}&email=${encodeURIComponent(eEmail)}">Pro \u2014 $29/mo</a></div>`}</div>
 </main></body></html>`;
 }
 
@@ -344,18 +344,21 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); return res.end(html);
     }
 
-    // ---- stripe webhook (public, signature-verified) ----
-    if (req.method === 'POST' && pathname === '/v1/stripe-webhook') {
-      const raw = await readBody(req);
-      if (!verifyStripe(raw, req.headers['stripe-signature'])) return sendJSON(res, 400, { error: 'invalid_signature' });
-      let ev; try { ev = JSON.parse(raw); } catch { return sendJSON(res, 400, { error: 'bad_json' }); }
+    // ---- internal billing entitlement push (from the central payment service; not Stripe) ----
+    if (req.method === 'POST' && pathname === '/internal/billing') {
+      if (req.headers['x-billing-secret'] !== process.env.BILLING_SECRET) return sendJSON(res, 401, { error: 'unauthorized' });
+      let b; try { b = JSON.parse(await readBody(req)); } catch { return sendJSON(res, 400, { error: 'bad_json' }); }
+      const PLANS = { free: { tier: 'free', limit: FREE_MONTHLY }, hobby: { tier: 'pro', limit: 10000 }, pro: { tier: 'pro', limit: PRO_MONTHLY } };
+      const pl = PLANS[b.plan] || PLANS.free;
       try {
-        if (ev.type === 'checkout.session.completed') {
-          const s = ev.data.object, uid = s.client_reference_id;
-          if (uid) { const { plan, monthlyLimit } = planForAmount(s.amount_total || 0); await upgradeUser(uid, plan, monthlyLimit, s.customer, s.subscription); console.log(`[stripe] upgraded user ${uid} -> ${plan}`); }
-        } else if (ev.type === 'customer.subscription.deleted') { await downgradeByCustomer(ev.data.object.customer); }
-      } catch (e) { console.error('[stripe] handler error:', e.message); }
-      return sendJSON(res, 200, { received: true });
+        await pool.query(`UPDATE api_keys SET tier=$2, plan=$3, monthly_limit=$4 WHERE user_id=$1`, [b.user_id, pl.tier, b.plan, pl.limit]);
+        await pool.query(`INSERT INTO subscriptions (user_id, plan, status, stripe_customer, stripe_subscription, updated_at)
+          VALUES ($1,$2,$3,$4,$5,now()) ON CONFLICT (user_id) DO UPDATE SET plan=EXCLUDED.plan, status=EXCLUDED.status,
+          stripe_customer=EXCLUDED.stripe_customer, stripe_subscription=EXCLUDED.stripe_subscription, updated_at=now()`,
+          [b.user_id, b.plan, b.status || 'active', b.customer || null, b.subscription || null]);
+        console.log(`[internal/billing] ${b.user_id} -> ${b.plan}`);
+      } catch (e) { console.error('[internal/billing] error:', e.message); return sendJSON(res, 500, { error: 'db_error' }); }
+      return sendJSON(res, 200, { ok: true });
     }
 
     // ---- render: POST /v1/pdf (key auth) ----

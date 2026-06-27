@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PDFFleet — the HTML-to-PDF API that costs half. APITemplate/PDFMonkey alternative.</title>
-  <meta name="description" content="PDFFleet is a fast HTML-to-PDF REST API via headless Chromium. Render HTML, URLs, or templates to PDF. 50 free/mo, paid from $9/mo — 50–70% cheaper than APITemplate, PDFMonkey, and Paperplane.">
+  <title>PDFFleet — HTML-to-PDF API. More PDFs, lower price than APITemplate, PDFMonkey, Paperplane.</title>
+  <meta name="description" content="PDFFleet is a fast HTML-to-PDF REST API via headless Chromium. Render HTML, URLs, or templates to PDF. 100 free/mo, then $4/mo for 10,000 — more PDFs at a lower price than APITemplate, PDFMonkey, and Paperplane.">
   <meta name="keywords" content="pdf api, html to pdf api, pdf generation api, apitemplate alternative, pdfmonkey alternative, paperplane alternative, cheap pdf api, headless chromium pdf">
-  <meta property="og:title" content="PDFFleet — HTML to PDF API, 50–70% cheaper">
-  <meta property="og:description" content="Fast HTML-to-PDF REST API. Free tier + paid from $9/mo. Same Chromium engine, a fraction of the price.">
+  <meta property="og:title" content="PDFFleet — HTML to PDF API. More PDFs, lower price.">
+  <meta property="og:description" content="Fast HTML-to-PDF REST API. Free tier + paid from $4/mo. Same Chromium engine, a fraction of the price.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://pdffleet.com/">
   <link rel="canonical" href="https://pdffleet.com/">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="PDFFleet — HTML to PDF API, 50–70% cheaper">
-  <meta name="twitter:description" content="Fast HTML-to-PDF REST API via headless Chromium. Free tier + paid from $9/mo.">
+  <meta name="twitter:title" content="PDFFleet — HTML to PDF API. More PDFs, lower price.">
+  <meta name="twitter:description" content="Fast HTML-to-PDF REST API via headless Chromium. Free tier + paid from $4/mo.">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <script type="application/ld+json">
   {
@@ -25,18 +25,18 @@
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Any (REST API)",
         "url": "https://pdffleet.com/",
-        "description": "Fast HTML-to-PDF REST API via headless Chromium. Render HTML, URLs, or templates to PDF — 50–70% cheaper than APITemplate, PDFMonkey, and Paperplane.",
+        "description": "Fast HTML-to-PDF REST API via headless Chromium. Render HTML, URLs, or templates to PDF. More PDFs at a lower price than APITemplate, PDFMonkey, and Paperplane.",
         "offers": [
-          { "@type": "Offer", "name": "Starter", "price": "0", "priceCurrency": "USD", "description": "50 PDFs/month free" },
-          { "@type": "Offer", "name": "Hobby", "price": "9", "priceCurrency": "USD", "description": "2,000 PDFs/month" },
-          { "@type": "Offer", "name": "Pro", "price": "29", "priceCurrency": "USD", "description": "50,000 PDFs/month" }
+          { "@type": "Offer", "name": "Starter", "price": "0", "priceCurrency": "USD", "description": "100 PDFs/month free" },
+          { "@type": "Offer", "name": "Hobby", "price": "4", "priceCurrency": "USD", "description": "10,000 PDFs/month" },
+          { "@type": "Offer", "name": "Pro", "price": "29", "priceCurrency": "USD", "description": "150,000 PDFs/month" }
         ]
       },
       {
         "@type": "Organization",
         "name": "PDFFleet",
         "url": "https://pdffleet.com/",
-        "description": "Self-hosted HTML-to-PDF API."
+        "description": "Managed HTML-to-PDF API."
       },
       {
         "@type": "WebSite",
@@ -46,7 +46,7 @@
     ]
   }
   </script>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B1430'/%3E%3Cpath d='M8 11h11M8 16h8M8 21h5' stroke='%232D5BFF' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M21 19l4-3-4-3z' fill='%232D5BFF'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%230B1430%27/%3E%3Cpath%20d%3D%27M9%207h7l5%205v11a2%202%200%200%201-2%202h-10a2%202%200%200%201-2-2V9a2%202%200%200%201%202-2z%27%20fill%3D%27%232D5BFF%27%20opacity%3D%270.25%27/%3E%3Cpath%20d%3D%27M16%207l5%205h-5z%27%20fill%3D%27%232D5BFF%27/%3E%3Cpath%20d%3D%27M11.5%2015l3%202.5-3%202.5M15.5%2015l3%202.5-3%202.5%27%20stroke%3D%27%23fff%27%20stroke-width%3D%271.8%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -211,7 +211,7 @@
 <header class="site-head">
   <div class="wrap">
     <a href="/" class="brand">
-      <span class="mark"><svg width="20" height="20" viewBox="0 0 32 32"><path d="M8 11h11M8 16h8M8 21h5" stroke="#2D5BFF" stroke-width="2.4" stroke-linecap="round"/><path d="M21 19l4-3-4-3z" fill="#2D5BFF"/></svg></span>
+      <span class="mark"><svg width="20" height="20" viewBox="0 0 32 32"><path d="M9 7h7l5 5v11a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z" fill="#2D5BFF" opacity="0.25"/><path d="M16 7l5 5h-5z" fill="#2D5BFF"/><path d="M11.5 15l3 2.5-3 2.5M15.5 15l3 2.5-3 2.5" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       PDF<b>Fleet</b>
     </a>
     <nav class="nav">
@@ -228,11 +228,11 @@
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <span class="hero-eyebrow"><span class="dot"></span><span class="eyebrow">HTML → PDF API · self-hosted</span></span>
-        <h1>The PDF API that costs <span class="half">half</span>.</h1>
-        <p class="lede">PDFFleet turns HTML, a URL, or a template into a pixel-perfect PDF via headless Chromium — one fast REST call. We run it on our own metal instead of VC-funded cloud, so every tier is <b>50–70% cheaper</b> than APITemplate, PDFMonkey, and Paperplane. No per-render markup, no surprise overages.</p>
+        <span class="hero-eyebrow"><span class="dot"></span><span class="eyebrow">HTML → PDF API · fully managed</span></span>
+        <h1>More PDFs. <span class="half">Lower price.</span></h1>
+        <p class="lede">PDFFleet turns HTML, a URL, or a template into a pixel-perfect PDF via headless Chromium — one fast REST call. A genuinely generous free tier, flat transparent pricing, and <b>more PDFs for less money</b> than APITemplate, PDFMonkey, or Paperplane at every tier. No per-render markups, no surprise overages.</p>
         <div class="hero-actions">
-          <a href="#get-key" class="btn btn-solid">Start free — 50 PDFs/mo →</a>
+          <a href="#get-key" class="btn btn-solid">Start free — 100 PDFs/mo →</a>
           <a href="#docs" class="btn btn-ghost">Read the docs</a>
         </div>
         <div class="specs">
@@ -266,8 +266,8 @@
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow">price comparison · verified 2026-06</span>
-      <h2>Same engine. Half the price.</h2>
-      <p>Everyone here renders with headless Chromium. We just don't mark it up 5×.</p>
+      <h2>More PDFs. Lower price.</h2>
+      <p>Everyone here renders with headless Chromium. Here's how the plans actually compare — prices verified June 2026.</p>
     </div>
     <div class="compare-card">
       <div class="compare-wrap">
@@ -275,46 +275,20 @@
           <thead>
             <tr>
               <th>Provider</th>
-              <th>Entry plan</th>
-              <th>PDFs/mo</th>
-              <th class="us">PDFFleet Hobby</th>
-              <th class="us">PDFFleet Pro</th>
+              <th>Free / month</th>
+              <th>Cheapest paid plan</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>APITemplate.io</td>
-              <td><span class="price">$19/mo</span></td>
-              <td>800</td>
-              <td class="us"><span class="price">$9/mo</span><span class="saving">−53% · 2,000 PDFs</span></td>
-              <td class="us"><span class="price">$29/mo</span><span class="saving">−53% · 50,000 PDFs</span></td>
-            </tr>
-            <tr>
-              <td>PDFMonkey</td>
-              <td><span class="price">$15/mo</span></td>
-              <td>500</td>
-              <td class="us"><span class="price">$9/mo</span><span class="saving">−40% · 4× more PDFs</span></td>
-              <td class="us"><span class="price">$29/mo</span><span class="saving">−48% · 100× more PDFs</span></td>
-            </tr>
-            <tr>
-              <td>Paperplane</td>
-              <td><span class="price">$19/mo</span></td>
-              <td>1,000</td>
-              <td class="us"><span class="price">$9/mo</span><span class="saving">−53% · 2× more PDFs</span></td>
-              <td class="us"><span class="price">$29/mo</span><span class="saving">−53% · 50× more PDFs</span></td>
-            </tr>
-            <tr>
-              <td>Nutrient</td>
-              <td><span class="price">$99/mo</span></td>
-              <td>5,000</td>
-              <td class="us"><span class="price">$9/mo</span><span class="saving">−91% · free tier covers 50</span></td>
-              <td class="us"><span class="price">$29/mo</span><span class="saving">−71% · 10× more PDFs</span></td>
-            </tr>
+            <tr><td class="us"><b>PDFFleet</b></td><td class="us">100</td><td class="us"><span class="price">$4</span> → 10,000 PDFs<span class="saving">most PDFs, lowest price</span></td></tr>
+            <tr><td>APITemplate.io</td><td>50</td><td><span class="price">$19</span> → 3,000 PDFs</td></tr>
+            <tr><td>PDFMonkey</td><td>20</td><td><span class="price">€5</span> → 300 PDFs</td></tr>
+            <tr><td>Paperplane</td><td>25</td><td><span class="price">$15</span> → 250 PDFs</td></tr>
           </tbody>
         </table>
       </div>
     </div>
-    <p class="compare-note">Why cheaper? Same tech (headless Chromium → PDF), run on self-owned hardware instead of AWS egress. No per-render markup. No VC valuation to feed. Note: you can also self-host this exact engine for free with <a href="/alternatives/gotenberg" style="color:var(--blue)">Gotenberg</a> &mdash; PDFFleet is the managed, no-Docker, no-DevOps version.</p>
+    <p class="compare-note">Prices verified June 2026 from each provider's pricing page. PDFFleet includes more PDFs at a lower price at every tier, the most generous free tier, and flat pricing with no per-document overage fees. Pro is $29 for 150,000 PDFs — versus $90–139 for 25,000 elsewhere.</p>
   </div>
 </section>
 
@@ -368,7 +342,7 @@
         <div class="pc-price">$0<span>/forever</span></div>
         <div class="pc-desc">Test it, build with it, ship small projects.</div>
         <ul class="pc-feat">
-          <li>50 PDFs / month</li>
+          <li>100 PDFs / month</li>
           <li>20 requests / minute</li>
           <li>HTML + URL + template render</li>
           <li>All page sizes + options</li>
@@ -380,33 +354,33 @@
         <span class="flag">Best value</span>
         <div class="pc-tier">recommended</div>
         <div class="pc-name">Hobby</div>
-        <div class="pc-price">$9<span>/month</span></div>
+        <div class="pc-price">$4<span>/month</span></div>
         <div class="pc-desc">For side projects and small businesses.</div>
         <ul class="pc-feat">
-          <li>2,000 PDFs / month</li>
+          <li>10,000 PDFs / month</li>
           <li>60 requests / minute</li>
           <li>Everything in Starter</li>
           <li>Priority email support</li>
           <li>Custom templates</li>
         </ul>
-        <a href="https://buy.stripe.com/14AfZg79kepZ3b9cMr9Zm07" class="btn btn-solid pc-cta">Subscribe $9/mo →</a>
+        <a href="/auth/login" class="btn btn-solid pc-cta">Sign in to subscribe →</a>
       </div>
       <div class="price-card">
         <div class="pc-tier">pro</div>
         <div class="pc-name">Pro</div>
         <div class="pc-price">$29<span>/month</span></div>
-        <div class="pc-desc">High-volume production — the cheapest serious tier anywhere.</div>
+        <div class="pc-desc">High-volume production — far cheaper than the incumbents.</div>
         <ul class="pc-feat">
-          <li>50,000 PDFs / month</li>
+          <li>150,000 PDFs / month</li>
           <li>300 requests / minute</li>
           <li>Everything in Hobby</li>
           <li>Priority rendering queue</li>
           <li>Dedicated support channel</li>
         </ul>
-        <a href="https://buy.stripe.com/28EbJ0alw3LlaDBeUz9Zm08" class="btn btn-ghost pc-cta">Subscribe $29/mo →</a>
+        <a href="/auth/login" class="btn btn-ghost pc-cta">Sign in to subscribe →</a>
       </div>
     </div>
-    <p class="pricing-note">Need more than 50,000/mo? Contact us for a custom volume tier. No per-document overage fees — ever.</p>
+    <p class="pricing-note">Need more than 150,000/mo? Contact us for a custom volume tier. No per-document overage fees — ever.</p>
   </div>
 </section>
 
@@ -416,7 +390,7 @@
     <div class="sec-head">
       <span class="eyebrow">free · no credit card</span>
       <h2>Get your free API key</h2>
-      <p>Sign in with Google or GitHub — your free key (50 PDFs/month) is waiting on your dashboard.</p>
+      <p>Sign in with Google or GitHub — your free key (100 PDFs/month) is waiting on your dashboard.</p>
     </div>
     <div style="text-align:center">
       <a href="/auth/login" class="btn btn-solid" style="font-size:1rem;padding:14px 32px">Sign in to get your key →</a>
@@ -466,7 +440,7 @@ curl https://pdffleet.com/v1/usage \
   <div class="wrap">
     <div class="cta-strip">
       <h2>Start rendering in 60 seconds</h2>
-      <p>50 free PDFs/mo · no credit card · swap your endpoint and save 50–70%</p>
+      <p>100 free PDFs/mo · no credit card · more PDFs for less at every tier</p>
       <a href="#get-key" class="btn btn-solid">Get your API key →</a>
     </div>
   </div>
@@ -474,7 +448,7 @@ curl https://pdffleet.com/v1/usage \
 
 <footer class="site-foot">
   <div class="wrap">
-    <span class="meta">© 2026 PDFFleet · self-hosted HTML-to-PDF API</span>
+    <span class="meta">© 2026 PDFFleet · managed HTML-to-PDF API</span>
     <div class="links">
       <a href="/docs">API docs</a>
       <a href="#pricing">pricing</a>
@@ -482,7 +456,7 @@ curl https://pdffleet.com/v1/usage \
       <a href="/alternatives/pdfmonkey">PDFMonkey alternative</a>
       <a href="/alternatives/paperplane">Paperplane alternative</a>
       <a href="/alternatives/docraptor">DocRaptor alternative</a>
-      <a href="/alternatives/gotenberg">vs Gotenberg</a>
+      <a href="/alternatives/gotenberg">Gotenberg alternative</a>
     </div>
   </div>
 </footer>
