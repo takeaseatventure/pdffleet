@@ -73,6 +73,14 @@ The `/data` volume holds `api_keys.json` and any stored HTML templates.
 - **Docker** image based on `node:20-bookworm-slim` + browser deps
 - Static file server for landing/comparison/docs pages
 
+
+## Public listings
+
+PDFFleet is listed in these public API directories:
+
+- [Public APIs — Documents & Productivity](https://github.com/public-apis/public-apis#documents--productivity)
+- [Public API Lists — Documents & Productivity](https://github.com/public-api-lists/public-api-lists#documents--productivity)
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
