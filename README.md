@@ -5,7 +5,7 @@
 [![Live](https://img.shields.io/badge/status-live-brightgreen)](https://pdffleet.com)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Live at **[pdffleet.com](https://pdffleet.com)** — 50 free PDFs/month, paid from $9/mo for 2,000.
+Live at **[pdffleet.com](https://pdffleet.com)** — 100 free PDFs/month, paid from $4/mo for 10,000.
 
 PDFFleet renders HTML, URLs, and templates to PDF using headless Chromium (Playwright) in a
 Docker container. It includes API-key authentication, per-tier rate limiting, monthly usage
@@ -20,9 +20,9 @@ cost of a render is effectively zero — and the pricing reflects that:
 
 | Tier   | PDFs/month | Price    |
 |--------|-----------|----------|
-| Free   | 50        | $0       |
-| Hobby  | 2,000     | $9/mo    |
-| Pro    | 50,000    | $29/mo   |
+| Free   | 100       | $0       |
+| Hobby  | 10,000    | $4/mo    |
+| Pro    | 150,000   | $29/mo   |
 
 See the full **[comparison with incumbents →](https://pdffleet.com/#compare)** and the
 **[API reference →](https://pdffleet.com/docs)**.
